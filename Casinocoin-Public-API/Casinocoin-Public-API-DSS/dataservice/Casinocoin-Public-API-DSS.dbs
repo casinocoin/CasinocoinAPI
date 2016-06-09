@@ -128,7 +128,7 @@
             <element column="price_jpy" name="PriceJPY" exportType="SCALAR" xsdType="xs:decimal"/>
             <element column="price_rub" name="PriceRUB" exportType="SCALAR" xsdType="xs:decimal"/>
             <element column="price_cad" name="PriceCAD" exportType="SCALAR" xsdType="xs:decimal"/>
-            <element column="price_gbp" name="PriceGPB" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="price_gbp" name="PriceGBP" exportType="SCALAR" xsdType="xs:decimal"/>
             <element column="price_aud" name="PriceAUD" exportType="SCALAR" xsdType="xs:decimal"/>
             <element column="price_nzd" name="PriceNZD" exportType="SCALAR" xsdType="xs:decimal"/>
             <element column="creation_time" name="InfoTime" exportType="SCALAR" xsdType="xs:dateTime"/>
