@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<api xmlns="http://ws.apache.org/ns/synapse" name="Casinocoin-ExchangeInfo" context="/CSCExchangeInfo">
-    <resource methods="GET">
-        <inSequence>
-            <header name="To" scope="default" action="remove"/>
-            <property name="RESPONSE" value="true" scope="default" type="STRING"/>
-            <property name="NO_ENTITY_BODY" scope="axis2" action="remove"/>
-            <clone continueParent="true" id="ExecUpdatesParallel">
-                <target sequence="updateAlcurEX"/>
-                <target sequence="updateAlterdice"/>
-            </clone>
-            <send/>
-        </inSequence>
-        <outSequence/>
-        <faultSequence>
-            <drop description="Drop message"/>
-        </faultSequence>
-    </resource>
+<api context="/CSCExchangeInfo" name="Casinocoin-ExchangeInfo" xmlns="http://ws.apache.org/ns/synapse">
+  <resource methods="GET" protocol="http">
+    <inSequence>
+      <header action="remove" name="To" scope="default"/>
+      <property name="RESPONSE" scope="default" type="STRING" value="true"/>
+      <property action="remove" name="NO_ENTITY_BODY" scope="axis2"/>
+      <clone continueParent="true" id="ExecUpdatesParallel">
+        <target sequence="updateAlcurEX"/>
+        <target sequence="updateCryptopia"/>
+      </clone>
+      <send/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence>
+      <drop description="Drop message"/>
+    </faultSequence>
+  </resource>
 </api>

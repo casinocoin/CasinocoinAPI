@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><artifacts>
+    <artifact name="CoinSwap" groupId="org.casinocoin-CoinSwap-API-ESB.api" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/CoinSwap.xml</file>
+    </artifact>
+    <artifact name="CoinSwapDSSEndpoint" groupId="org.casinocoin-CoinSwap-API-ESB.endpoint" version="1.0.0" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/CoinSwapDSSEndpoint.xml</file>
+    </artifact>
+    <artifact name="BTC-RPC-Endpoint" groupId="org.casinocoin-CoinSwap-API-ESB.endpoint" version="1.0.0" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/BTC-RPC-Endpoint.xml</file>
+    </artifact>
+    <artifact name="CSC-RPC-Endpoint" groupId="org.casinocoin-CoinSwap-API-ESB.endpoint" version="1.0.0" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/CSC-RPC-Endpoint.xml</file>
+    </artifact>
+    <artifact name="CSC-RPC-USER" groupId="org.casinocoin-CoinSwap-API-ESB.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/CSC-RPC-USER.xml</file>
+    </artifact>
+    <artifact name="CSC-RPC-PW" groupId="org.casinocoin-CoinSwap-API-ESB.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/CSC-RPC-PW.xml</file>
+    </artifact>
+    <artifact name="BTC-RPC-USER" groupId="org.casinocoin-CoinSwap-API-ESB.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/BTC-RPC-USER.xml</file>
+    </artifact>
+    <artifact name="BTC-RPC-PW" groupId="org.casinocoin-CoinSwap-API-ESB.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/BTC-RPC-PW.xml</file>
+    </artifact>
+    <artifact name="getBTCDepositAddress" groupId="org.casinocoin-CoinSwap-API-ESB.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/getBTCDepositAddress.xml</file>
+    </artifact>
+    <artifact name="getCSCDepositAddress" groupId="org.casinocoin-CoinSwap-API-ESB.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/getCSCDepositAddress.xml</file>
+    </artifact>
+    <artifact name="getBTCBalance" groupId="org.casinocoin-CoinSwap-API-ESB.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/getBTCBalance.xml</file>
+    </artifact>
+    <artifact name="getCSCBalance" groupId="org.casinocoin-CoinSwap-API-ESB.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/getCSCBalance.xml</file>
+    </artifact>
+    <artifact name="getCSCInfo" groupId="org.casinocoin-CoinSwap-API-ESB.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/getCSCInfo.xml</file>
+    </artifact>
+    <artifact name="validateCSCAddress" groupId="org.casinocoin-CoinSwap-API-ESB.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/validateCSCAddress.xml</file>
+    </artifact>
+    <artifact name="validateBTCAddress" groupId="org.casinocoin-CoinSwap-API-ESB.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/validateBTCAddress.xml</file>
+    </artifact>
+    <artifact name="CSCInfoEndpoint" groupId="org.casinocoin-CoinSwap-API-ESB.endpoint" version="1.0.0" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/CSCInfoEndpoint.xml</file>
+    </artifact>
+    <artifact name="ActiveMQ-CoinSwap-Endpoint" groupId="org.casinocoin-CoinSwap-API-ESB.endpoint" version="1.0.0" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/ActiveMQ-CoinSwap-Endpoint.xml</file>
+    </artifact>
+    <artifact name="getSwap" groupId="org.casinocoin-CoinSwap-API-ESB.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/getSwap.xml</file>
+    </artifact>
+    <artifact name="enqueueSwapMessage" groupId="org.casinocoin-CoinSwap-API-ESB.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/enqueueSwapMessage.xml</file>
+    </artifact>
+    <artifact name="ActiveMQ-PW" groupId="org.casinocoin-CoinSwap-API-ESB.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/ActiveMQ-PW.xml</file>
+    </artifact>
+    <artifact name="refundBTCDeposit" groupId="org.casinocoin-CoinSwap-API-ESB.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/refundBTCDeposit.xml</file>
+    </artifact>
+</artifacts>

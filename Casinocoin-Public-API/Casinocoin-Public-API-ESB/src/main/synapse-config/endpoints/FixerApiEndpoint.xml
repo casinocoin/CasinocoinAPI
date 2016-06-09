@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<endpoint name="FixerApiEndpoint" xmlns="http://ws.apache.org/ns/synapse">
+  <http method="get" trace="disable" uri-template="http://api.fixer.io/latest?base=USD">
+    <timeout>
+      <duration>5000</duration>
+      <responseAction>fault</responseAction>
+    </timeout>
+  </http>
+</endpoint>

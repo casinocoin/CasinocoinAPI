@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<endpoint name="BitstampEndpoint" xmlns="http://ws.apache.org/ns/synapse">
+  <http method="get" trace="disable" uri-template="https://www.bitstamp.net/api/ticker/">
+    <timeout>
+      <duration>5000</duration>
+      <responseAction>fault</responseAction>
+    </timeout>
+  </http>
+</endpoint>

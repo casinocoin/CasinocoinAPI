@@ -9,62 +9,63 @@
   <name>Casinocoin-Public-API</name>
   <description>Casinocoin-Public-API</description>
   <properties>
-    <org.casinocoin.Public-API-ESB.sequence_._updateCryptsy>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.sequence_._updateCryptsy>
-    <artifact.types>jaggery/app=zip,service/rule=aar,lib/library/bundle=jar,synapse/message-processors=xml,synapse/endpointTemplate=xml,synapse/proxy-service=xml,synapse/message-store=xml,carbon/application=car,registry/resource=zip,lib/dataservice/validator=jar,synapse/endpoint=xml,web/application=war,synapse/sequence=xml,synapse/configuration=xml,lib/registry/handlers=jar,synapse/task=xml,service/meta=xml,webapp/jaxws=war,synapse/api=xml,cep/bucket=xml,bpel/workflow=zip,lib/registry/filter=jar,service/dataservice=dbs,synapse/local-entry=xml,synapse/priority-executor=xml,synapse/event-source=xml,synapse/template=xml,lib/carbon/ui=jar,service/axis2=aar,synapse/sequenceTemplate=xml,wso2/gadget=dar,lib/synapse/mediator=jar</artifact.types>
+    <org.casinocoin.Public-API-ESB.endpoint_._SetCoinInfoEndpoint>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.endpoint_._SetCoinInfoEndpoint>
+    <org.casinocoin.Public-API-ESB.endpoint_._GetActiveNewsItems>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.endpoint_._GetActiveNewsItems>
+    <org.casinocoin.Public-API-ESB.sequence_._updateNovaExchange>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.sequence_._updateNovaExchange>
+    <org.casinocoin.Public-API-ESB.endpoint_._GetActiveCasinos>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.endpoint_._GetActiveCasinos>
     <org.casinocoin.Public-API-ESB.api_._Casinocoin-UserRegistration>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.api_._Casinocoin-UserRegistration>
-    <org.casinocoin.Public-API-ESB.proxy-service_._ExchangeInfoProxy>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.proxy-service_._ExchangeInfoProxy>
-    <org.casinocoin.Public-API-ESB.api_._Casinocoin-CoinInfo>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.api_._Casinocoin-CoinInfo>
+    <org.casinocoin.Public-API-ESB.endpoint_._GetCoinInfo>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.endpoint_._GetCoinInfo>
+    <org.casinocoin.Public-API-ESB.endpoint_._FixerApiEndpoint>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.endpoint_._FixerApiEndpoint>
+    <org.casinocoin.Public-API-ESB.endpoint_._GetActivePromotions>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.endpoint_._GetActivePromotions>
+    <org.casinocoin.Public-API-ESB.sequence_._updateCryptopia>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.sequence_._updateCryptopia>
     <org.casinocoin.Public-API-ESB.api_._Casinocoin-Public-API>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.api_._Casinocoin-Public-API>
-    <org.casinocoin.Public-API-DSS_._Casinocoin-Public-API-DSS>capp/DataServicesServer</org.casinocoin.Public-API-DSS_._Casinocoin-Public-API-DSS>
-    <com.example.Casinocoin-Public-API-DSS_._Casinocoin-Public-API-DSS>capp/DataServicesServer</com.example.Casinocoin-Public-API-DSS_._Casinocoin-Public-API-DSS>
-    <org.casinocoin.Public-API-ESB.proxy-service_._CoinInfoProxy>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.proxy-service_._CoinInfoProxy>
+    <org.casinocoin.Public-API-ESB.api_._Casinocoin-CoinInfo>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.api_._Casinocoin-CoinInfo>
     <org.casinocoin.Public-API-ESB.api_._Casinocoin-ExchangeInfo>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.api_._Casinocoin-ExchangeInfo>
     <org.casinocoin.Public-API-ESB.sequence_._updateAlterdice>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.sequence_._updateAlterdice>
-    <org.casinocoin.Public-API-ESB.task_._UpdateCoinInfoTask>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.task_._UpdateCoinInfoTask>
-    <org.casinocoin.Public-API-ESB.task_._UpdateExchangeInfoTask>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.task_._UpdateExchangeInfoTask>
+    <org.casinocoin.Public-API-DSS.dataservice_._Casinocoin-Public-API-DSS>capp/DataServicesServer</org.casinocoin.Public-API-DSS.dataservice_._Casinocoin-Public-API-DSS>
+    <org.casinocoin.Public-API-ESB.endpoint_._NovaExchangeAPI>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.endpoint_._NovaExchangeAPI>
+    <org.casinocoin.Public-API-ESB.endpoint_._CryptopiaAPIEndpoint>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.endpoint_._CryptopiaAPIEndpoint>
+    <artifact.types>jaggery/app=zip,service/rule=aar,lib/library/bundle=jar,event/receiver=xml,synapse/message-processors=xml,synapse/endpointTemplate=xml,synapse/message-store=xml,synapse/proxy-service=xml,event/execution-plan=siddhiql,carbon/application=car,registry/resource=zip,lib/dataservice/validator=jar,synapse/endpoint=xml,web/application=war,synapse/inbound-endpoint=xml,synapse/sequence=xml,synapse/configuration=xml,lib/registry/handlers=jar,synapse/task=xml,service/meta=xml,webapp/jaxws=war,synapse/api=xml,synapse/lib=zip,bpel/workflow=zip,lib/registry/filter=jar,service/dataservice=dbs,event/publisher=xml,synapse/local-entry=xml,synapse/priority-executor=xml,synapse/event-source=xml,synapse/template=xml,event/stream=json,lib/carbon/ui=jar,service/axis2=aar,synapse/sequenceTemplate=xml,wso2/gadget=dar,lib/synapse/mediator=jar</artifact.types>
     <org.casinocoin.Public-API-ESB.sequence_._updateAlcurEX>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.sequence_._updateAlcurEX>
+    <org.casinocoin.Public-API-ESB.endpoint_._UpdateExchangeInfoEndpoint>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.endpoint_._UpdateExchangeInfoEndpoint>
+    <org.casinocoin.Public-API-ESB.endpoint_._GetActiveExchanges>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.endpoint_._GetActiveExchanges>
+    <org.casinocoin.Public-API-ESB.endpoint_._BitstampEndpoint>capp/EnterpriseServiceBus</org.casinocoin.Public-API-ESB.endpoint_._BitstampEndpoint>
   </properties>
   <dependencies>
     <dependency>
-      <groupId>org.casinocoin.Public-API-ESB.task</groupId>
-      <artifactId>UpdateCoinInfoTask</artifactId>
-      <version>0.1.0</version>
+      <groupId>org.casinocoin.Public-API-ESB.endpoint</groupId>
+      <artifactId>GetActiveCasinos</artifactId>
+      <version>0.1.1</version>
       <type>xml</type>
     </dependency>
     <dependency>
-      <groupId>org.casinocoin.Public-API-ESB.proxy-service</groupId>
-      <artifactId>CoinInfoProxy</artifactId>
-      <version>0.1.0</version>
-      <type>xml</type>
-    </dependency>
-    <dependency>
-      <groupId>org.casinocoin.Public-API-ESB.api</groupId>
-      <artifactId>Casinocoin-CoinInfo</artifactId>
-      <version>0.1.0</version>
-      <type>xml</type>
-    </dependency>
-    <dependency>
-      <groupId>org.casinocoin.Public-API-ESB.proxy-service</groupId>
-      <artifactId>ExchangeInfoProxy</artifactId>
-      <version>0.1.0</version>
+      <groupId>org.casinocoin.Public-API-ESB.endpoint</groupId>
+      <artifactId>GetActiveExchanges</artifactId>
+      <version>0.1.1</version>
       <type>xml</type>
     </dependency>
     <dependency>
       <groupId>org.casinocoin.Public-API-ESB.sequence</groupId>
-      <artifactId>updateAlcurEX</artifactId>
-      <version>0.1.0</version>
+      <artifactId>updateCryptopia</artifactId>
+      <version>0.1.1</version>
       <type>xml</type>
     </dependency>
     <dependency>
-      <groupId>org.casinocoin.Public-API-ESB.sequence</groupId>
-      <artifactId>updateCryptsy</artifactId>
-      <version>0.1.0</version>
+      <groupId>org.casinocoin.Public-API-ESB.endpoint</groupId>
+      <artifactId>SetCoinInfoEndpoint</artifactId>
+      <version>0.1.1</version>
       <type>xml</type>
     </dependency>
     <dependency>
-      <groupId>org.casinocoin.Public-API-ESB.api</groupId>
-      <artifactId>Casinocoin-ExchangeInfo</artifactId>
-      <version>0.1.0</version>
+      <groupId>org.casinocoin.Public-API-ESB.endpoint</groupId>
+      <artifactId>BitstampEndpoint</artifactId>
+      <version>0.1.1</version>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>org.casinocoin.Public-API-ESB.endpoint</groupId>
+      <artifactId>GetActiveNewsItems</artifactId>
+      <version>0.1.1</version>
       <type>xml</type>
     </dependency>
     <dependency>
@@ -80,24 +81,76 @@
       <type>xml</type>
     </dependency>
     <dependency>
+      <groupId>org.casinocoin.Public-API-ESB.endpoint</groupId>
+      <artifactId>CryptopiaAPIEndpoint</artifactId>
+      <version>0.1.1</version>
+      <type>xml</type>
+    </dependency>
+    <dependency>
       <groupId>org.casinocoin.Public-API-ESB.api</groupId>
       <artifactId>Casinocoin-Public-API</artifactId>
-      <version>0.1.0</version>
-      <type>xml</type>
-      <scope>system</scope>
-      <systemPath>${basedir}\Casinocoin-Public-API-ESB\target\capp\artifacts\api\Casinocoin-Public-API\pom.xml</systemPath>
-    </dependency>
-    <dependency>
-      <groupId>org.casinocoin.Public-API-ESB.task</groupId>
-      <artifactId>UpdateExchangeInfoTask</artifactId>
-      <version>0.1.0</version>
+      <version>0.1.1</version>
       <type>xml</type>
     </dependency>
     <dependency>
-      <groupId>org.casinocoin.Public-API-DSS</groupId>
+      <groupId>org.casinocoin.Public-API-ESB.sequence</groupId>
+      <artifactId>updateNovaExchange</artifactId>
+      <version>0.1.1</version>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>org.casinocoin.Public-API-DSS.dataservice</groupId>
       <artifactId>Casinocoin-Public-API-DSS</artifactId>
-      <version>0.1.0</version>
+      <version>0.1.1</version>
       <type>dbs</type>
+    </dependency>
+    <dependency>
+      <groupId>org.casinocoin.Public-API-ESB.endpoint</groupId>
+      <artifactId>UpdateExchangeInfoEndpoint</artifactId>
+      <version>0.1.1</version>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>org.casinocoin.Public-API-ESB.api</groupId>
+      <artifactId>Casinocoin-CoinInfo</artifactId>
+      <version>0.1.1</version>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>org.casinocoin.Public-API-ESB.sequence</groupId>
+      <artifactId>updateAlcurEX</artifactId>
+      <version>0.1.1</version>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>org.casinocoin.Public-API-ESB.endpoint</groupId>
+      <artifactId>GetCoinInfo</artifactId>
+      <version>0.1.1</version>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>org.casinocoin.Public-API-ESB.api</groupId>
+      <artifactId>Casinocoin-ExchangeInfo</artifactId>
+      <version>0.1.1</version>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>org.casinocoin.Public-API-ESB.endpoint</groupId>
+      <artifactId>GetActivePromotions</artifactId>
+      <version>0.1.1</version>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>org.casinocoin.Public-API-ESB.endpoint</groupId>
+      <artifactId>NovaExchangeAPI</artifactId>
+      <version>0.1.1</version>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>org.casinocoin.Public-API-ESB.endpoint</groupId>
+      <artifactId>FixerApiEndpoint</artifactId>
+      <version>0.1.1</version>
+      <type>xml</type>
     </dependency>
   </dependencies>
   <repositories>
@@ -169,7 +222,7 @@
       <plugin>
         <groupId>org.wso2.maven</groupId>
         <artifactId>maven-car-deploy-plugin</artifactId>
-        <version>1.0.10</version>
+        <version>1.1.0</version>
         <extensions>true</extensions>
         <configuration>
           <carbonServers>

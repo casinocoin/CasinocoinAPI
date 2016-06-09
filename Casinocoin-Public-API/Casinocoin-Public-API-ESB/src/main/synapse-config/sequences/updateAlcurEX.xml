@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sequence xmlns="http://ws.apache.org/ns/synapse" name="updateAlcurEX">
-    <property name="RESPONSE" value="false" scope="default" type="STRING"/>
-    <property name="AlcurEXExchangeID" value="ALCUREX" scope="default" type="STRING" description="AlcurEXInfo"/>
-    <property name="NO_ENTITY_BODY" scope="axis2" action="remove" description="NO_ENTITY_BODY"/>
-    <call>
-        <endpoint>
-            <http method="get" uri-template="https://alcurex.org/api/market.php?pair=CSC_BTC&amp;price=buy">
-                <timeout>
-                    <duration>10000</duration>
-                    <responseAction>discard</responseAction>
-                </timeout>
-            </http>
-        </endpoint>
-    </call>
-    <property name="AlcurEXLastBidPriceBTC" expression="json-eval($.CSC_BTC[0].price)" scope="default" type="STRING" description="LastBidPriceBTC"/>
-    <property name="NO_ENTITY_BODY" scope="axis2" action="remove" description="NO_ENTITY_BODY"/>
-    <call>
+<sequence name="updateAlcurEX" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+  <property name="RESPONSE" scope="default" type="STRING" value="false"/>
+  <property description="AlcurEXInfo" name="AlcurEXExchangeID"
+    scope="default" type="STRING" value="ALCUREX"/>
+  <property action="remove" description="NO_ENTITY_BODY"
+    name="NO_ENTITY_BODY" scope="axis2"/>
+  <call>
+		<endpoint>
+			<http method="get" uri-template="https://alcurex.org/api/market.php?pair=CSC_BTC&amp;price=buy">
+				<timeout>
+					<duration>10000</duration>
+					<responseAction>discard</responseAction>
+				</timeout>
+			</http>
+		</endpoint>
+	</call>
+  <property description="LastBidPriceBTC"
+    expression="json-eval($.CSC_BTC[0].price)"
+    name="AlcurEXLastBidPriceBTC" scope="default" type="STRING"/>
+  <property action="remove" description="NO_ENTITY_BODY"
+    name="NO_ENTITY_BODY" scope="axis2"/>
+  <call>
         <endpoint>
             <http method="get" uri-template="https://alcurex.org/api/market.php?pair=CSC_BTC&amp;price=sell">
                 <timeout>
@@ -25,9 +30,12 @@
             </http>
         </endpoint>
     </call>
-    <property name="AlcurEXLastAskPriceBTC" expression="json-eval($.CSC_BTC[0].price)" scope="default" type="STRING" description="LastAskPriceBTC"/>
-    <property name="NO_ENTITY_BODY" scope="axis2" action="remove" description="NO_ENTITY_BODY"/>
-    <call>
+  <property description="LastAskPriceBTC"
+    expression="json-eval($.CSC_BTC[0].price)"
+    name="AlcurEXLastAskPriceBTC" scope="default" type="STRING"/>
+  <property action="remove" description="NO_ENTITY_BODY"
+    name="NO_ENTITY_BODY" scope="axis2"/>
+  <call>
         <endpoint>
             <http method="get" uri-template="https://alcurex.org/api/market.php?pair=CSC_BTC&amp;last=last">
                 <timeout>
@@ -37,9 +45,12 @@
             </http>
         </endpoint>
     </call>
-    <property name="AlcurEXLastPriceBTC" expression="json-eval($.CSC_BTC.price)" scope="default" type="STRING" description="LastPriceBTC"/>
-    <property name="NO_ENTITY_BODY" scope="axis2" action="remove" description="NO_ENTITY_BODY"/>
-    <call>
+  <property description="LastPriceBTC"
+    expression="json-eval($.CSC_BTC.price)" name="AlcurEXLastPriceBTC"
+    scope="default" type="STRING"/>
+  <property action="remove" description="NO_ENTITY_BODY"
+    name="NO_ENTITY_BODY" scope="axis2"/>
+  <call>
         <endpoint>
             <http method="get" uri-template="https://alcurex.org/api/market.php?currency=CSC&amp;interval=24&amp;pair=CSC_BTC">
                 <timeout>
@@ -49,36 +60,31 @@
             </http>
         </endpoint>
     </call>
-    <property name="AlcurEXVolume24H" expression="json-eval($.tradeamount)" scope="default" type="STRING" description="Volume24H"/>
-    <payloadFactory media-type="xml" description="CreateDBPayload">
-        <format>
-            <p:updateExchangeInfo xmlns:p="org.casinocoin.public.api.dss">
-                <xs:LastBidPriceBTC xmlns:xs="org.casinocoin.public.api.dss">$1</xs:LastBidPriceBTC>
-                <xs:LastAskPriceBTC xmlns:xs="org.casinocoin.public.api.dss">$2</xs:LastAskPriceBTC>
-                <xs:LastPriceBTC xmlns:xs="org.casinocoin.public.api.dss">$3</xs:LastPriceBTC>
-                <xs:Volume24H xmlns:xs="org.casinocoin.public.api.dss">$4</xs:Volume24H>
-                <xs:ShortName xmlns:xs="org.casinocoin.public.api.dss">$5</xs:ShortName>
-            </p:updateExchangeInfo>
-        </format>
-        <args>
-            <arg evaluator="xml" expression="$ctx:AlcurEXLastBidPriceBTC"/>
-            <arg evaluator="xml" expression="$ctx:AlcurEXLastAskPriceBTC"/>
-            <arg evaluator="xml" expression="$ctx:AlcurEXLastPriceBTC"/>
-            <arg evaluator="xml" expression="$ctx:AlcurEXVolume24H"/>
-            <arg evaluator="xml" expression="$ctx:AlcurEXExchangeID"/>
-        </args>
-    </payloadFactory>
-    <property name="REST_URL_POSTFIX" scope="axis2" action="remove"/>
-    <property name="HTTP_METHOD" value="POST" scope="axis2" type="STRING"/>
-    <call>
-        <endpoint>
-            <address uri="http://localhost:9773/services/Casinocoin-Public-API-DSS.HTTPEndpoint/updateExchangeInfo" format="rest">
-                <timeout>
-                    <duration>5000</duration>
-                    <responseAction>discard</responseAction>
-                </timeout>
-            </address>
-        </endpoint>
-    </call>
-    <drop description="End"/>
+  <property description="Volume24H"
+    expression="json-eval($.tradeamount)" name="AlcurEXVolume24H"
+    scope="default" type="STRING"/>
+  <payloadFactory description="CreateDBPayload" media-type="xml">
+    <format>
+      <p:updateExchangeInfo xmlns:p="org.casinocoin.public.api.dss">
+        <xs:LastBidPriceBTC xmlns:xs="org.casinocoin.public.api.dss">$1</xs:LastBidPriceBTC>
+        <xs:LastAskPriceBTC xmlns:xs="org.casinocoin.public.api.dss">$2</xs:LastAskPriceBTC>
+        <xs:LastPriceBTC xmlns:xs="org.casinocoin.public.api.dss">$3</xs:LastPriceBTC>
+        <xs:Volume24H xmlns:xs="org.casinocoin.public.api.dss">$4</xs:Volume24H>
+        <xs:ShortName xmlns:xs="org.casinocoin.public.api.dss">$5</xs:ShortName>
+      </p:updateExchangeInfo>
+    </format>
+    <args>
+      <arg evaluator="xml" expression="$ctx:AlcurEXLastBidPriceBTC"/>
+      <arg evaluator="xml" expression="$ctx:AlcurEXLastAskPriceBTC"/>
+      <arg evaluator="xml" expression="$ctx:AlcurEXLastPriceBTC"/>
+      <arg evaluator="xml" expression="$ctx:AlcurEXVolume24H"/>
+      <arg evaluator="xml" expression="$ctx:AlcurEXExchangeID"/>
+    </args>
+  </payloadFactory>
+  <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+  <property name="HTTP_METHOD" scope="axis2" type="STRING" value="POST"/>
+  <call>
+    <endpoint key="UpdateExchangeInfoEndpoint"/>
+  </call>
+  <drop description="End"/>
 </sequence>

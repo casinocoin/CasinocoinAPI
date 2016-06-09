@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<endpoint name="NovaExchangeAPI" xmlns="http://ws.apache.org/ns/synapse">
+  <http method="get" trace="disable" uri-template="https://novaexchange.com/remote/market/info/BTC_CSC/">
+    <timeout>
+      <duration>10000</duration>
+      <responseAction>discard</responseAction>
+    </timeout>
+  </http>
+</endpoint>

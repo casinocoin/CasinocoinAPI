@@ -5,11 +5,8 @@
     <artifact name="Casinocoin-CoinInfo" groupId="org.casinocoin.Public-API-ESB.api" version="0.1.1" type="synapse/api" serverRole="EnterpriseServiceBus">
         <file>src/main/synapse-config/api/Casinocoin-CoinInfo.xml</file>
     </artifact>
-        <artifact name="Casinocoin-ExchangeInfo" groupId="org.casinocoin.Public-API-ESB.api" version="0.1.1" type="synapse/api" serverRole="EnterpriseServiceBus">
+    <artifact name="Casinocoin-ExchangeInfo" groupId="org.casinocoin.Public-API-ESB.api" version="0.1.1" type="synapse/api" serverRole="EnterpriseServiceBus">
         <file>src/main/synapse-config/api/Casinocoin-ExchangeInfo.xml</file>
-    </artifact>
-                <artifact name="updateCryptsy" groupId="org.casinocoin.Public-API-ESB.sequence" version="0.1.1" type="synapse/sequence" serverRole="EnterpriseServiceBus">
-        <file>src/main/synapse-config/sequences/updateCryptsy.xml</file>
     </artifact>
     <artifact name="updateAlcurEX" groupId="org.casinocoin.Public-API-ESB.sequence" version="0.1.1" type="synapse/sequence" serverRole="EnterpriseServiceBus">
         <file>src/main/synapse-config/sequences/updateAlcurEX.xml</file>
@@ -19,5 +16,44 @@
     </artifact>
     <artifact name="Casinocoin-UserRegistration" groupId="org.casinocoin.Public-API-ESB.api" version="0.1.1" type="synapse/api" serverRole="EnterpriseServiceBus">
         <file>src/main/synapse-config/api/Casinocoin-UserRegistration.xml</file>
+    </artifact>
+    <artifact name="updateNovaExchange" groupId="org.casinocoin.Public-API-ESB.sequence" version="0.1.1" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/updateNovaExchange.xml</file>
+    </artifact>
+    <artifact name="UpdateExchangeInfoEndpoint" groupId="org.casinocoin.Public-API-ESB.endpoint" version="0.1.1" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/UpdateExchangeInfoEndpoint.xml</file>
+    </artifact>
+    <artifact name="BitstampEndpoint" groupId="org.casinocoin.Public-API-ESB.endpoint" version="0.1.1" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/BitstampEndpoint.xml</file>
+    </artifact>
+    <artifact name="FixerApiEndpoint" groupId="org.casinocoin.Public-API-ESB.endpoint" version="0.1.1" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/FixerApiEndpoint.xml</file>
+    </artifact>
+    <artifact name="SetCoinInfoEndpoint" groupId="org.casinocoin.Public-API-ESB.endpoint" version="0.1.1" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/SetCoinInfoEndpoint.xml</file>
+    </artifact>
+    <artifact name="NovaExchangeAPI" groupId="org.casinocoin.Public-API-ESB.endpoint" version="0.1.1" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/NovaExchangeAPI.xml</file>
+    </artifact>
+    <artifact name="updateCryptopia" groupId="org.casinocoin.Public-API-ESB.sequence" version="0.1.1" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/updateCryptopia.xml</file>
+    </artifact>
+    <artifact name="CryptopiaAPIEndpoint" groupId="org.casinocoin.Public-API-ESB.endpoint" version="0.1.1" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/CryptopiaAPIEndpoint.xml</file>
+    </artifact>
+    <artifact name="GetActiveNewsItems" groupId="org.casinocoin.Public-API-ESB.endpoint" version="0.1.1" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/GetActiveNewsItems.xml</file>
+    </artifact>
+    <artifact name="GetActiveCasinos" groupId="org.casinocoin.Public-API-ESB.endpoint" version="0.1.1" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/GetActiveCasinos.xml</file>
+    </artifact>
+    <artifact name="GetActiveExchanges" groupId="org.casinocoin.Public-API-ESB.endpoint" version="0.1.1" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/GetActiveExchanges.xml</file>
+    </artifact>
+    <artifact name="GetActivePromotions" groupId="org.casinocoin.Public-API-ESB.endpoint" version="0.1.1" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/GetActivePromotions.xml</file>
+    </artifact>
+    <artifact name="GetCoinInfo" groupId="org.casinocoin.Public-API-ESB.endpoint" version="0.1.1" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/GetCoinInfo.xml</file>
     </artifact>
 </artifacts>

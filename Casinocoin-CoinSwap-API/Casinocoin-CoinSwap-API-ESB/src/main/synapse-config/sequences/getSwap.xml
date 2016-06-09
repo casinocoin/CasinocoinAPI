@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="getSwap" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+  <dblookup description="GetSwap">
+    <connection>
+      <pool>
+        <dsName>jdbc/CSCSwapDS</dsName>
+      </pool>
+    </connection>
+    <statement>
+      <sql><![CDATA[SELECT swap_uuid, COALESCE(UNIX_TIMESTAMP(swap_started_time)*1000,'null') AS swap_started_time, 
+      				COALESCE(UNIX_TIMESTAMP(swap_finished_time)*1000,'null') AS swap_finished_time,
+      				COALESCE(UNIX_TIMESTAMP(swap_refunded_time)*1000,'null') AS swap_refunded_time, 
+      				src_tx_id, COALESCE(confirmations,'null') AS confirmations, dst_tx_id 
+      				FROM csc_coinswap_api.coin_swap WHERE swap_uuid = ?;]]></sql>
+      <parameter expression="$ctx:SwapUUID" type="VARCHAR"/>
+      <result column="confirmations" name="Confirmations"/>
+      <result column="src_tx_id" name="SrcTxID"/>
+      <result column="swap_refunded_time" name="SwapRefundedTime"/>
+      <result column="dst_tx_id" name="DstTxID"/>
+      <result column="swap_started_time" name="SwapStartedTime"/>
+      <result column="swap_finished_time" name="SwapFinishedTime"/>
+    </statement>
+  </dblookup>
+  <filter regex="false" source="boolean(get-property('SwapStartedTime'))">
+    <then>
+      <property name="SwapFound" scope="default" type="BOOLEAN" value="false"/>
+      <property name="Confirmations" scope="default" type="STRING" value="null"/>
+      <property name="SrcTxID" scope="default" type="STRING" value=""/>
+      <property name="DstTxID" scope="default" type="STRING" value=""/>
+      <property name="SwapStartedTime" scope="default" type="STRING" value="null"/>
+      <property name="SwapFinishedTime" scope="default" type="STRING" value="null"/>
+      <property name="SwapRefundedTime" scope="default" type="STRING" value="null"/>
+    </then>
+    <else>
+      <property name="SwapFound" scope="default" type="BOOLEAN" value="true"/>
+    </else>
+  </filter>
+  <payloadFactory description="getSwapResult" media-type="json">
+    <format>{"SwapUUID":"$1", "SwapFound":$2, "SwapStartedTime":$3, "SwapFinishedTime":$4, "SwapRefundedTime":$5, "SrcTxID":"$6", "Confirmations":$7, "DstTxID":"$8"}</format>
+    <args>
+      <arg evaluator="xml" expression="$ctx:SwapUUID"/>
+      <arg evaluator="xml" expression="$ctx:SwapFound"/>
+      <arg evaluator="xml" expression="$ctx:SwapStartedTime"/>
+      <arg evaluator="xml" expression="$ctx:SwapFinishedTime"/>
+      <arg evaluator="xml" expression="$ctx:SwapRefundedTime"/>
+      <arg evaluator="xml" expression="$ctx:SrcTxID"/>
+      <arg evaluator="xml" expression="$ctx:Confirmations"/>
+      <arg evaluator="xml" expression="$ctx:DstTxID"/>
+    </args>
+  </payloadFactory>
+  <property expression="json-eval($)" name="SwapResult" scope="default" type="STRING"/>
+</sequence>

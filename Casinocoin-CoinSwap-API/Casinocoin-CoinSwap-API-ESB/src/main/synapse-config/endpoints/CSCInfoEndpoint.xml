@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<endpoint name="CSCInfoEndpoint" xmlns="http://ws.apache.org/ns/synapse">
+  <http method="get" trace="disable" uri-template="http://api.casinocoin.org/CSCPublicAPI/CoinInfo"/>
+</endpoint>

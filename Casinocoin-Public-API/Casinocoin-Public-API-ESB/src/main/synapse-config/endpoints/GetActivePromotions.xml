@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<endpoint name="GetActivePromotions" xmlns="http://ws.apache.org/ns/synapse">
+  <address format="rest" trace="disable" uri="http://localhost:9773/services/Casinocoin-Public-API-DSS.HTTPEndpoint/getActivePromotions">
+    <timeout>
+      <duration>5000</duration>
+      <responseAction>fault</responseAction>
+    </timeout>
+  </address>
+</endpoint>

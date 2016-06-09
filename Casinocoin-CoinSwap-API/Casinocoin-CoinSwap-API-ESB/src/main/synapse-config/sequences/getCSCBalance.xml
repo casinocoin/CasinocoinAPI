@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="getCSCBalance" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+  <payloadFactory description="GetBalance" media-type="json">
+    <format>{"jsonrpc": "1.0", "id": "wso2rpc", "method": "getbalance", "params": []}</format>
+    <args/>
+  </payloadFactory>
+  <property
+    expression="fn:concat(get-property('CSC-RPC-USER'),':',get-property('CSC-RPC-PW'))"
+    name="CscRpcUserPass" scope="default" type="STRING"/>
+  <property
+    expression="fn:concat('Basic ', base64Encode(get-property('CscRpcUserPass')))"
+    name="Authorization" scope="transport" type="STRING"/>
+  <property name="DISABLE_CHUNKING" scope="axis2" type="STRING" value="true"/>
+  <property description="messageType" name="messageType" scope="axis2"
+    type="STRING" value="application/json"/>
+  <call description="">
+    <endpoint key="CSC-RPC-Endpoint"/>
+  </call>
+  <property expression="json-eval($.result)" name="CSCBalanceResult"
+    scope="default" type="STRING"/>
+</sequence>

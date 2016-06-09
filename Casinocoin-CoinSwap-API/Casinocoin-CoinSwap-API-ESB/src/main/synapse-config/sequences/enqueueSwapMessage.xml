@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="enqueueSwapMessage" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+  <sequence key="getSwap"/>
+  <payloadFactory description="GetSwap" media-type="json">
+    <format>$1</format>
+    <args>
+      <arg evaluator="xml" expression="$ctx:SwapResult"/>
+    </args>
+  </payloadFactory>
+  <property expression="fn:concat('admin:',get-property('ActiveMQ-PW'))"
+    name="ActiveMQUserPass" scope="default" type="STRING"/>
+  <property
+    expression="fn:concat('Basic ', base64Encode(get-property('ActiveMQUserPass')))"
+    name="Authorization" scope="transport" type="STRING"/>
+  <property name="json" scope="transport" type="STRING" value="true"/>
+  <property name="Accept" scope="transport" type="STRING" value="application/json"/>
+  <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+  <call description="Enqueue Swap Message">
+    <endpoint key="ActiveMQ-CoinSwap-Endpoint"/>
+  </call>
+</sequence>

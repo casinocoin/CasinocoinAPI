@@ -1,0 +1,755 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/CoinSwapAPI" name="CoinSwap" xmlns="http://ws.apache.org/ns/synapse">
+  <resource methods="GET" protocol="http" uri-template="/getDepositAddress/{CoinName}">
+    <inSequence>
+      <switch source="$ctx:uri.var.CoinName">
+        <case regex="BTC">
+          <sequence key="getBTCDepositAddress"/>
+          <property expression="get-property('BTCDepositAddressResult')"
+            name="DepositAddress" scope="default" type="STRING"/>
+        </case>
+        <case regex="CSC">
+          <sequence key="getCSCDepositAddress"/>
+          <property expression="get-property('CSCDepositAddressResult')"
+            name="DepositAddress" scope="default" type="STRING"/>
+        </case>
+        <default>
+          <log description="getDepositAddressDefault">
+            <property name="### " value="Default for Switch/Case"/>
+          </log>
+        </default>
+      </switch>
+      <payloadFactory description="getDepositAddressResult" media-type="json">
+        <format>{"coinname":"$1", "address":"$2"}</format>
+        <args>
+          <arg evaluator="xml" expression="$ctx:uri.var.CoinName"/>
+          <arg evaluator="xml" expression="$ctx:DepositAddress"/>
+        </args>
+      </payloadFactory>
+      <property description="messageType" name="messageType"
+        scope="axis2" type="STRING" value="application/json"/>
+      <respond description="Finished"/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+  </resource>
+  <resource methods="GET" protocol="http" uri-template="/getBalance/{CoinName}">
+    <inSequence>
+      <switch source="$ctx:uri.var.CoinName">
+        <case regex="BTC">
+          <sequence key="getBTCBalance"/>
+          <property expression="get-property('BTCBalanceResult')"
+            name="Balance" scope="default" type="STRING"/>
+        </case>
+        <case regex="CSC">
+          <sequence key="getCSCBalance"/>
+          <property expression="get-property('CSCBalanceResult')"
+            name="Balance" scope="default" type="STRING"/>
+        </case>
+        <default>
+          <log description="getBalance">
+            <property name="### " value="Coin not implemented for getBalance"/>
+          </log>
+        </default>
+      </switch>
+      <payloadFactory description="getBalanceResult" media-type="json">
+        <format>{"coinname":"$1", "balance":"$2"}</format>
+        <args>
+          <arg evaluator="xml" expression="$ctx:uri.var.CoinName"/>
+          <arg evaluator="xml" expression="$ctx:Balance"/>
+        </args>
+      </payloadFactory>
+      <property description="messageType" name="messageType"
+        scope="axis2" type="STRING" value="application/json"/>
+      <respond description="Finished"/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+  </resource>
+  <resource methods="GET" protocol="http" uri-template="/validateAddress/{CoinName}?address={ADDRESS}">
+    <inSequence>
+      <switch source="$ctx:uri.var.CoinName">
+        <case regex="BTC">
+          <property expression="$ctx:query.param.address"
+            name="BTCAddress" scope="default" type="STRING"/>
+          <sequence key="validateBTCAddress"/>
+          <property expression="get-property('BTCValidAddress')"
+            name="ValidAddress" scope="default" type="BOOLEAN"/>
+        </case>
+        <case regex="CSC">
+          <property expression="$ctx:query.param.address"
+            name="CSCAddress" scope="default" type="STRING"/>
+          <sequence key="validateCSCAddress"/>
+          <property expression="get-property('CSCValidAddress')"
+            name="ValidAddress" scope="default" type="BOOLEAN"/>
+        </case>
+        <default>
+          <log description="validateAddress">
+            <property name="### " value="Coin not implemented for validateAddress"/>
+          </log>
+        </default>
+      </switch>
+      <payloadFactory description="validateAddressResult" media-type="json">
+        <format>{"coinname":"$1", "isvalid":$2}</format>
+        <args>
+          <arg evaluator="xml" expression="$ctx:uri.var.CoinName"/>
+          <arg evaluator="xml" expression="$ctx:ValidAddress"/>
+        </args>
+      </payloadFactory>
+      <property description="messageType" name="messageType"
+        scope="axis2" type="STRING" value="application/json"/>
+      <respond description="Finished"/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+  </resource>
+  <resource methods="GET" protocol="http" uri-template="/getSwapInfo">
+    <inSequence>
+      <sequence key="getCSCInfo"/>
+      <property expression="get-property('CSCInfoResult')"
+        name="CSCInfoResult" scope="default" type="STRING"/>
+      <payloadFactory description="getCSCInfoResult" media-type="json">
+        <format>$1</format>
+        <args>
+          <arg evaluator="xml" expression="$ctx:CSCInfoResult"/>
+        </args>
+      </payloadFactory>
+      <property expression="json-eval($.blocks)" name="CSCBlocks"
+        scope="default" type="STRING"/>
+      <property expression="json-eval($.balance)" name="CSCBalance"
+        scope="default" type="STRING"/>
+      <property expression="json-eval($.paytxfee)" name="CSCPayTxFee"
+        scope="default" type="STRING"/>
+      <dblookup description="GetSwapSettings">
+        <connection>
+          <pool>
+            <dsName>jdbc/CSCSwapDS</dsName>
+          </pool>
+        </connection>
+        <statement>
+          <sql><![CDATA[SELECT set1.MIN_SWAP_SAT, set2.MAX_SWAP_VALUE, set3.SWAP_FEE_PERCENTAGE, set4.MAX_COINS_AVAILABLE FROM 
+(SELECT setting_value AS MIN_SWAP_SAT 
+FROM csc_coinswap_api.settings 
+where setting_name = 'MIN_SWAP_SAT') set1,
+(SELECT setting_value AS MAX_SWAP_VALUE 
+FROM csc_coinswap_api.settings 
+WHERE setting_name = 'MAX_SWAP_VALUE') set2,
+(SELECT setting_value AS SWAP_FEE_PERCENTAGE 
+FROM csc_coinswap_api.settings 
+WHERE setting_name = 'SWAP_FEE_PERCENTAGE') set3,
+(SELECT setting_value AS MAX_COINS_AVAILABLE 
+FROM csc_coinswap_api.settings 
+WHERE setting_name = 'MAX_COINS_AVAILABLE') set4;]]></sql>
+          <result column="MIN_SWAP_SAT" name="MinSwapSat"/>
+          <result column="MAX_COINS_AVAILABLE" name="MaxCoinsAvailable"/>
+          <result column="MAX_SWAP_VALUE" name="MaxSwapValue"/>
+          <result column="SWAP_FEE_PERCENTAGE" name="SwapFeePercentage"/>
+        </statement>
+      </dblookup>
+      <payloadFactory description="getCSCInfoResult" media-type="json">
+        <format>{"Blocks":$1, "Balance":$2, "PayTxFee":$3, "MinSwapSat":$4, "MaxSwapValue":$5, "SwapFeePercentage":$6, "MaxCoinsAvailable":$7}</format>
+        <args>
+          <arg evaluator="xml" expression="$ctx:CSCBlocks"/>
+          <arg evaluator="xml" expression="$ctx:CSCBalance"/>
+          <arg evaluator="xml" expression="$ctx:CSCPayTxFee"/>
+          <arg evaluator="xml" expression="$ctx:MinSwapSat"/>
+          <arg evaluator="xml" expression="$ctx:MaxSwapValue"/>
+          <arg evaluator="xml" expression="$ctx:SwapFeePercentage"/>
+          <arg evaluator="xml" expression="$ctx:MaxCoinsAvailable"/>
+        </args>
+      </payloadFactory>
+      <property description="messageType" name="messageType"
+        scope="axis2" type="STRING" value="application/json"/>
+      <respond description="Finished"/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+  </resource>
+  <resource methods="POST" protocol="http" uri-template="/createSwap">
+    <inSequence>
+      <log description="createSwap">
+        <property name="### " value="#"/>
+        <property expression="json-eval($)" name="createSwap"/>
+      </log>
+      <property name="SourceCoin" scope="default" type="STRING" value="BTC"/>
+      <property expression="json-eval($.btcRefundAddress)"
+        name="SourceRefundAddress" scope="default" type="STRING"/>
+      <property expression="json-eval($.btcAmountSat)"
+        name="SourceSatoshi" scope="default" type="STRING"/>
+      <property expression="json-eval($.btcAmount)" name="SourceAmount"
+        scope="default" type="STRING"/>
+      <property name="DestinationCoin" scope="default" type="STRING" value="CSC"/>
+      <property expression="json-eval($.cscReceiveAddress)"
+        name="DestinationAddress" scope="default" type="STRING"/>
+      <property expression="json-eval($.cscAmountSat)"
+        name="DestinationSatoshi" scope="default" type="STRING"/>
+      <property expression="json-eval($.cscAmount)"
+        name="DestinationAmount" scope="default" type="STRING"/>
+      <property expression="json-eval($.agreedTimestamp)"
+        name="AggreedTimestamp" scope="default" type="STRING"/>
+      <property expression="json-eval($.agreedIP)" name="AggreedIP"
+        scope="default" type="STRING"/>
+      <!-- Get a deposit address from the daemon for the source coin -->
+      <switch source="$ctx:SourceCoin">
+        <case regex="BTC">
+          <sequence key="getBTCDepositAddress"/>
+          <property expression="get-property('BTCDepositAddressResult')"
+            name="SourceDepositAddress" scope="default" type="STRING"/>
+        </case>
+        <case regex="CSC">
+          <sequence key="getCSCDepositAddress"/>
+          <property expression="get-property('CSCDepositAddressResult')"
+            name="SourceDepositAddress" scope="default" type="STRING"/>
+        </case>
+        <default>
+          <log description="validateAddress">
+            <property name="### " value="Coin not implemented for validateAddress"/>
+          </log>
+        </default>
+      </switch>
+      <payloadFactory description="CreateDBPayload" media-type="xml">
+        <format>
+          <p:CreateCoinSwap xmlns:p="http://ws.wso2.org/dataservice">
+            <xs:swap_src_coin xmlns:xs="http://ws.wso2.org/dataservice">$1</xs:swap_src_coin>
+            <xs:src_deposit_address xmlns:xs="http://ws.wso2.org/dataservice">$2</xs:src_deposit_address>
+            <xs:src_return_address xmlns:xs="http://ws.wso2.org/dataservice">$3</xs:src_return_address>
+            <xs:src_sat xmlns:xs="http://ws.wso2.org/dataservice">$4</xs:src_sat>
+            <xs:src_amount xmlns:xs="http://ws.wso2.org/dataservice">$5</xs:src_amount>
+            <xs:swap_dst_coin xmlns:xs="http://ws.wso2.org/dataservice">$6</xs:swap_dst_coin>
+            <xs:dst_address xmlns:xs="http://ws.wso2.org/dataservice">$7</xs:dst_address>
+            <xs:dst_sat xmlns:xs="http://ws.wso2.org/dataservice">$8</xs:dst_sat>
+            <xs:dst_amount xmlns:xs="http://ws.wso2.org/dataservice">$9</xs:dst_amount>
+            <xs:aggreed_terms_time xmlns:xs="http://ws.wso2.org/dataservice">$10</xs:aggreed_terms_time>
+            <xs:aggreed_terms_ip xmlns:xs="http://ws.wso2.org/dataservice">$11</xs:aggreed_terms_ip>
+          </p:CreateCoinSwap>
+        </format>
+        <args>
+          <arg evaluator="xml" expression="$ctx:SourceCoin"/>
+          <arg evaluator="xml" expression="$ctx:SourceDepositAddress"/>
+          <arg evaluator="xml" expression="$ctx:SourceRefundAddress"/>
+          <arg evaluator="xml" expression="$ctx:SourceSatoshi"/>
+          <arg evaluator="xml" expression="$ctx:SourceAmount"/>
+          <arg evaluator="xml" expression="$ctx:DestinationCoin"/>
+          <arg evaluator="xml" expression="$ctx:DestinationAddress"/>
+          <arg evaluator="xml" expression="$ctx:DestinationSatoshi"/>
+          <arg evaluator="xml" expression="$ctx:DestinationAmount"/>
+          <arg evaluator="xml" expression="$ctx:AggreedTimestamp"/>
+          <arg evaluator="xml" expression="$ctx:AggreedIP"/>
+        </args>
+      </payloadFactory>
+      <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+      <property name="HTTP_METHOD" scope="axis2" type="STRING" value="POST"/>
+      <call description="">
+        <endpoint key="CoinSwapDSSEndpoint"/>
+      </call>
+      <property expression="//*[local-name()='ID']/text()" name="SwapID"
+        scope="default" type="STRING"/>
+      <dblookup description="GetSwap">
+        <connection>
+          <pool>
+            <dsName>jdbc/CSCSwapDS</dsName>
+          </pool>
+        </connection>
+        <statement>
+          <sql><![CDATA[SELECT src_deposit_address, swap_uuid, UNIX_TIMESTAMP(creation_time)*1000 AS creation_time FROM csc_coinswap_api.coin_swap WHERE id = ?;]]></sql>
+          <parameter expression="$ctx:SwapID" type="BIGINT"/>
+          <result column="src_deposit_address" name="DepositAddress"/>
+          <result column="creation_time" name="CreationTime"/>
+          <result column="swap_uuid" name="SwapUUID"/>
+        </statement>
+      </dblookup>
+      <log description="createSwap">
+        <property name="### " value="# Result:"/>
+        <property expression="$ctx:SwapID" name="SwapID"/>
+        <property expression="$ctx:DepositAddress" name="DepositAddress"/>
+        <property expression="$ctx:SwapUUID" name="SwapUUID"/>
+      </log>
+      <sequence key="enqueueSwapMessage"/>
+      <payloadFactory description="CreateOutput" media-type="json">
+        <format>{"SwapID":$1, "SwapUUID":"$2", "DepositAddress":"$3", "CreationTime":$4}</format>
+        <args>
+          <arg evaluator="xml" expression="$ctx:SwapID"/>
+          <arg evaluator="xml" expression="$ctx:SwapUUID"/>
+          <arg evaluator="xml" expression="$ctx:DepositAddress"/>
+          <arg evaluator="xml" expression="$ctx:CreationTime"/>
+        </args>
+      </payloadFactory>
+      <property description="messageType" name="messageType"
+        scope="axis2" type="STRING" value="application/json"/>
+      <respond description="Finished"/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+  </resource>
+  <resource methods="POST" protocol="http" uri-template="/cancelSwap">
+    <inSequence>
+      <log description="cancelSwap">
+        <property name="### " value="#"/>
+        <property expression="json-eval($)" name="cancelSwap"/>
+      </log>
+      <property expression="json-eval($.swapCancelTime)"
+        name="SwapCancelTime" scope="default" type="STRING"/>
+      <property expression="json-eval($.swapUUID)" name="SwapUUID"
+        scope="default" type="STRING"/>
+      <payloadFactory description="CreateDBPayload" media-type="xml">
+        <format>
+          <p:CancelCoinSwap xmlns:p="http://ws.wso2.org/dataservice">
+            <xs:swap_canceled_time xmlns:xs="http://ws.wso2.org/dataservice">$1</xs:swap_canceled_time>
+            <xs:swap_uuid xmlns:xs="http://ws.wso2.org/dataservice">$2</xs:swap_uuid>
+          </p:CancelCoinSwap>
+        </format>
+        <args>
+          <arg evaluator="xml" expression="$ctx:SwapCancelTime"/>
+          <arg evaluator="xml" expression="$ctx:SwapUUID"/>
+        </args>
+      </payloadFactory>
+      <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+      <property name="HTTP_METHOD" scope="axis2" type="STRING" value="POST"/>
+      <call description="">
+        <endpoint key="CoinSwapDSSEndpoint"/>
+      </call>
+      <property description="messageType" name="messageType"
+        scope="axis2" type="STRING" value="application/json"/>
+      <respond description="Finished"/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+  </resource>
+  <resource methods="GET" protocol="http" uri-template="/Swap/{SwapUUID}">
+    <inSequence>
+      <property expression="$ctx:uri.var.SwapUUID" name="SwapUUID"
+        scope="default" type="STRING"/>
+      <sequence key="getSwap"/>
+      <payloadFactory description="GetSwap" media-type="json">
+        <format>$1</format>
+        <args>
+          <arg evaluator="xml" expression="$ctx:SwapResult"/>
+        </args>
+      </payloadFactory>
+      <property description="messageType" name="messageType"
+        scope="axis2" type="STRING" value="application/json"/>
+      <respond description="Finished"/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+  </resource>
+  <resource methods="GET" protocol="http" uri-template="/bitcoinNotification?txid={TXID}">
+    <inSequence>
+      <log description="bitcoinNotification">
+        <property name="### " value="#"/>
+        <property expression="$ctx:query.param.txid" name="bitcoinNotification"/>
+      </log>
+      <payloadFactory description="GetTransaction" media-type="json">
+        <format>{"jsonrpc": "1.0", "id": "wso2rpc", "method": "gettransaction", "params": ["$1"]}</format>
+        <args>
+          <arg evaluator="xml" expression="$ctx:query.param.txid"/>
+        </args>
+      </payloadFactory>
+      <property
+        expression="fn:concat(get-property('BTC-RPC-USER'),':',get-property('BTC-RPC-PW'))"
+        name="BtcRpcUserPass" scope="default" type="STRING"/>
+      <property
+        expression="fn:concat('Basic ', base64Encode(get-property('BtcRpcUserPass')))"
+        name="Authorization" scope="transport" type="STRING"/>
+      <property name="DISABLE_CHUNKING" scope="axis2" type="STRING" value="true"/>
+      <property description="messageType" name="messageType"
+        scope="axis2" type="STRING" value="application/json"/>
+      <call description="">
+        <endpoint key="BTC-RPC-Endpoint"/>
+      </call>
+      <property expression="json-eval($.result.details[0].category)"
+        name="TxType" scope="default" type="STRING"/>
+      <property expression="json-eval($.result.details[0].amount)"
+        name="Amount" scope="default" type="STRING"/>
+      <property expression="number($ctx:Amount) * 100000000"
+        name="TxSat" scope="default" type="STRING"/>
+      <property expression="json-eval($.result.time)" name="TxTime"
+        scope="default" type="STRING"/>
+      <property expression="json-eval($.result.details[0].address)"
+        name="CoinAddress" scope="default" type="STRING"/>
+      <property expression="json-eval($.result.confirmations)"
+        name="Confirmations" scope="default" type="STRING"/>
+      <log description="bitcoinNotification">
+        <property name="### " value="#"/>
+        <property expression="$ctx:Confirmations" name="Confirmations"/>
+        <property expression="$ctx:TxSat" name="TxSat"/>
+      </log>
+      <filter regex="^[1-9][0-9]*$" source="get-property('Confirmations')">
+        <then>
+          <property expression="json-eval($.result.blockhash)"
+            name="BlockHash" scope="default" type="STRING"/>
+          <log description="GetBlock for Hash">
+            <property name="### " value="#"/>
+            <property expression="$ctx:BlockHash" name="GetBlock for Hash:"/>
+          </log>
+          <payloadFactory description="GetBlockHeader" media-type="json">
+            <format>{"jsonrpc": "1.0", "id": "wso2rpc", "method": "getblockheader", "params": ["$1"]}</format>
+            <args>
+              <arg evaluator="xml" expression="$ctx:BlockHash"/>
+            </args>
+          </payloadFactory>
+          <property
+            expression="fn:concat(get-property('BTC-RPC-USER'),':',get-property('BTC-RPC-PW'))"
+            name="BtcRpcUserPass" scope="default" type="STRING"/>
+          <property
+            expression="fn:concat('Basic ', base64Encode(get-property('BtcRpcUserPass')))"
+            name="Authorization" scope="transport" type="STRING"/>
+          <property name="DISABLE_CHUNKING" scope="axis2" type="STRING" value="true"/>
+          <property description="messageType" name="messageType"
+            scope="axis2" type="STRING" value="application/json"/>
+          <call description="">
+            <endpoint key="BTC-RPC-Endpoint"/>
+          </call>
+          <property expression="json-eval($.result.height)"
+            name="BlockHeight" scope="default" type="STRING"/>
+          <property expression="json-eval($.result.time)"
+            name="BlockTime" scope="default" type="STRING"/>
+          <log description="BlockHeight">
+            <property name="### " value="#"/>
+            <property expression="$ctx:BlockHeight" name="BlockHeight:"/>
+          </log>
+          <payloadFactory description="CreateDBPayload" media-type="xml">
+            <format>
+              <p:UpdateTransaction xmlns:p="http://ws.wso2.org/dataservice">
+                <xs:blockhash xmlns:xs="http://ws.wso2.org/dataservice">$1</xs:blockhash>
+                <xs:blockheight xmlns:xs="http://ws.wso2.org/dataservice">$2</xs:blockheight>
+                <xs:confirmations xmlns:xs="http://ws.wso2.org/dataservice">$3</xs:confirmations>
+                <xs:tx_id xmlns:xs="http://ws.wso2.org/dataservice">$4</xs:tx_id>
+              </p:UpdateTransaction>
+            </format>
+            <args>
+              <arg evaluator="xml" expression="$ctx:BlockHash"/>
+              <arg evaluator="xml" expression="$ctx:BlockHeight"/>
+              <arg evaluator="xml" expression="$ctx:Confirmations"/>
+              <arg evaluator="xml" expression="$ctx:query.param.txid"/>
+            </args>
+          </payloadFactory>
+          <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+          <property name="HTTP_METHOD" scope="axis2" type="STRING" value="POST"/>
+          <call description="">
+            <endpoint key="CoinSwapDSSEndpoint"/>
+          </call>
+          <!--  get Swap UUID for Coin Swap -->
+          <dblookup description="GetSwap">
+            <connection>
+              <pool>
+                <dsName>jdbc/CSCSwapDS</dsName>
+              </pool>
+            </connection>
+            <statement>
+              <sql><![CDATA[SELECT swap_uuid, src_amount, dst_address, dst_amount, src_return_address, 
+              (swap_canceled_time is not null) as canceled, (swap_started_time is not null) as started, 
+              (swap_finished_time is not null) as finished, (valid_to > now()) as valid 
+              FROM csc_coinswap_api.coin_swap WHERE src_deposit_address = ?;]]></sql>
+              <parameter expression="$ctx:CoinAddress" type="VARCHAR"/>
+              <result column="started" name="TxStarted"/>
+              <result column="src_return_address" name="RefundAddress"/>
+              <result column="dst_address" name="DestinationAddress"/>
+              <result column="finished" name="TxFinished"/>
+              <result column="src_amount" name="SourceAmount"/>
+              <result column="canceled" name="TxCanceled"/>
+              <result column="valid" name="TxValid"/>
+              <result column="swap_uuid" name="SwapUUID"/>
+              <result column="dst_amount" name="DestinationAmount"/>
+            </statement>
+          </dblookup>
+          <log description="SendToAddress">
+            <property name="### " value="#"/>
+            <property expression="$ctx:DestinationAddress" name="SendToAddress"/>
+            <property expression="$ctx:SourceAmount" name="SourceAmount"/>
+            <property expression="$ctx:SwapUUID" name="SwapUUID"/>
+            <property expression="$ctx:DestinationAmount" name="DestinationAmount"/>
+          </log>
+          <filter xpath="(get-property('TxCanceled')=0 and get-property('TxStarted')=1 and get-property('TxFinished')=0 and get-property('TxValid')=1)">
+            <then>
+              <!-- Create destination transacion if amount is same as requested -->
+              <filter xpath="(get-property('Amount')*100000000) = (get-property('SourceAmount')*100000000)">
+                <then>
+                  <payloadFactory description="GetTransaction" media-type="json">
+                    <format>{"jsonrpc": "1.0", "id": "wso2rpc", "method": "sendtoaddress", "params": ["$1",$2]}</format>
+                    <args>
+                      <arg evaluator="xml" expression="$ctx:DestinationAddress"/>
+                      <arg evaluator="xml" expression="$ctx:DestinationAmount"/>
+                    </args>
+                  </payloadFactory>
+                  <log description="SendToAddress">
+                    <property name="### " value="#"/>
+                    <property expression="json-eval($)" name="SendToAddress:"/>
+                  </log>
+                  <property
+                    expression="fn:concat(get-property('CSC-RPC-USER'),':',get-property('CSC-RPC-PW'))"
+                    name="CscRpcUserPass" scope="default" type="STRING"/>
+                  <property
+                    expression="fn:concat('Basic ', base64Encode(get-property('CscRpcUserPass')))"
+                    name="Authorization" scope="transport" type="STRING"/>
+                  <property name="DISABLE_CHUNKING" scope="axis2"
+                    type="STRING" value="true"/>
+                  <property description="messageType" name="messageType"
+                    scope="axis2" type="STRING" value="application/json"/>
+                  <call description="">
+                    <endpoint key="CSC-RPC-Endpoint"/>
+                  </call>
+                  <property expression="json-eval($.result)"
+                    name="DstTxID" scope="default" type="STRING"/>
+                  <!--  Update CoinSwap -->
+                  <payloadFactory description="CreateDBPayload" media-type="xml">
+                    <format>
+                      <p:UpdateCoinSwap xmlns:p="http://ws.wso2.org/dataservice">
+                        <xs:swap_finished_time xmlns:xs="http://ws.wso2.org/dataservice">$1</xs:swap_finished_time>
+                        <xs:dst_tx_id xmlns:xs="http://ws.wso2.org/dataservice">$2</xs:dst_tx_id>
+                        <xs:confirmations xmlns:xs="http://ws.wso2.org/dataservice">$3</xs:confirmations>
+                        <xs:swap_uuid xmlns:xs="http://ws.wso2.org/dataservice">$4</xs:swap_uuid>
+                      </p:UpdateCoinSwap>
+                    </format>
+                    <args>
+                      <arg evaluator="xml" expression="number($ctx:BlockTime) * 1000"/>
+                      <arg evaluator="xml" expression="$ctx:DstTxID"/>
+                      <arg evaluator="xml" expression="$ctx:Confirmations"/>
+                      <arg evaluator="xml" expression="$ctx:SwapUUID"/>
+                    </args>
+                  </payloadFactory>
+                  <log description="UpdateCoinSwap">
+                    <property name="### " value="# UpdateCoinSwap BEFORE"/>
+                    <property expression="$body" name="body"/>
+                  </log>
+                  <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+                  <property name="HTTP_METHOD" scope="axis2"
+                    type="STRING" value="POST"/>
+                  <call description="">
+                    <endpoint key="CoinSwapDSSEndpoint"/>
+                  </call>
+                </then>
+                <else>
+                  <!-- Deposit value different that Required -->
+                  <log description="depositInvalid">
+                    <property name="### " value="# depositInvalid"/>
+                    <property expression="$ctx:Amount" name="Amount"/>
+                    <property expression="$ctx:SourceAmount" name="SourceAmount"/>
+                  </log>
+                  <sequence key="refundBTCDeposit"/>
+                </else>
+              </filter>
+            </then>
+            <else>
+              <!-- Transaction Finished, Canceled or No longer Valid so Refund -->
+              <sequence key="refundBTCDeposit"/>
+            </else>
+          </filter>
+          <sequence key="enqueueSwapMessage"/>
+          <log description="UpdateCoinSwap">
+            <property name="### " value="# UpdateCoinSwap AFTER"/>
+            <property expression="$body" name="body"/>
+          </log>
+        </then>
+        <else>
+          <payloadFactory description="CreateDBPayload" media-type="xml">
+            <format>
+              <p:CreateTransaction xmlns:p="http://ws.wso2.org/dataservice">
+                <xs:csp_id xmlns:xs="http://ws.wso2.org/dataservice">$1</xs:csp_id>
+                <xs:tx_id xmlns:xs="http://ws.wso2.org/dataservice">$2</xs:tx_id>
+                <xs:tx_coin xmlns:xs="http://ws.wso2.org/dataservice">$3</xs:tx_coin>
+                <xs:tx_type xmlns:xs="http://ws.wso2.org/dataservice">$4</xs:tx_type>
+                <xs:tx_sat xmlns:xs="http://ws.wso2.org/dataservice">$5</xs:tx_sat>
+                <xs:tx_time xmlns:xs="http://ws.wso2.org/dataservice">$6</xs:tx_time>
+                <xs:coin_address xmlns:xs="http://ws.wso2.org/dataservice">$7</xs:coin_address>
+                <xs:blockhash xmlns:xs="http://ws.wso2.org/dataservice">$8</xs:blockhash>
+                <xs:blockheight xmlns:xs="http://ws.wso2.org/dataservice">$9</xs:blockheight>
+                <xs:confirmations xmlns:xs="http://ws.wso2.org/dataservice">$10</xs:confirmations>
+              </p:CreateTransaction>
+            </format>
+            <args>
+              <arg value="0"/>
+              <arg evaluator="xml" expression="$ctx:query.param.txid"/>
+              <arg value="BTC"/>
+              <arg evaluator="xml" expression="$ctx:TxType"/>
+              <arg evaluator="xml" expression="$ctx:TxSat"/>
+              <arg evaluator="xml" expression="$ctx:TxTime"/>
+              <arg evaluator="xml" expression="$ctx:CoinAddress"/>
+              <arg value=""/>
+              <arg value="0"/>
+              <arg evaluator="xml" expression="$ctx:Confirmations"/>
+            </args>
+          </payloadFactory>
+          <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+          <property name="HTTP_METHOD" scope="axis2" type="STRING" value="POST"/>
+          <call description="">
+            <endpoint key="CoinSwapDSSEndpoint"/>
+          </call>
+          <!--  get Swap UUID for Coin Swap -->
+          <dblookup description="GetSwap">
+            <connection>
+              <pool>
+                <dsName>jdbc/CSCSwapDS</dsName>
+              </pool>
+            </connection>
+            <statement>
+              <sql><![CDATA[SELECT swap_uuid FROM csc_coinswap_api.coin_swap WHERE src_deposit_address = ?;]]></sql>
+              <parameter expression="$ctx:CoinAddress" type="VARCHAR"/>
+              <result column="swap_uuid" name="SwapUUID"/>
+            </statement>
+          </dblookup>
+          <!--  Start CoinSwap -->
+          <payloadFactory description="CreateDBPayload" media-type="xml">
+            <format>
+              <p:StartCoinSwap xmlns:p="http://ws.wso2.org/dataservice">
+                <xs:swap_started_time xmlns:xs="http://ws.wso2.org/dataservice">$1</xs:swap_started_time>
+                <xs:src_tx_id xmlns:xs="http://ws.wso2.org/dataservice">$2</xs:src_tx_id>
+                <xs:swap_uuid xmlns:xs="http://ws.wso2.org/dataservice">$3</xs:swap_uuid>
+              </p:StartCoinSwap>
+            </format>
+            <args>
+              <arg evaluator="xml" expression="$ctx:TxTime"/>
+              <arg evaluator="xml" expression="$ctx:query.param.txid"/>
+              <arg evaluator="xml" expression="$ctx:SwapUUID"/>
+            </args>
+          </payloadFactory>
+          <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+          <property name="HTTP_METHOD" scope="axis2" type="STRING" value="POST"/>
+          <call description="">
+            <endpoint key="CoinSwapDSSEndpoint"/>
+          </call>
+          <sequence key="enqueueSwapMessage"/>
+        </else>
+      </filter>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+  </resource>
+  <resource methods="GET" protocol="http" uri-template="/casinocoinNotification?txid={TXID}">
+    <inSequence>
+      <log description="casinocoinNotification">
+        <property name="### " value="#"/>
+        <property expression="$ctx:query.param.txid" name="casinocoinNotification"/>
+      </log>
+      <payloadFactory description="GetTransaction" media-type="json">
+        <format>{"jsonrpc": "1.0", "id": "wso2rpc", "method": "gettransaction", "params": ["$1"]}</format>
+        <args>
+          <arg evaluator="xml" expression="$ctx:query.param.txid"/>
+        </args>
+      </payloadFactory>
+      <property
+        expression="fn:concat(get-property('CSC-RPC-USER'),':',get-property('CSC-RPC-PW'))"
+        name="CscRpcUserPass" scope="default" type="STRING"/>
+      <property
+        expression="fn:concat('Basic ', base64Encode(get-property('CscRpcUserPass')))"
+        name="Authorization" scope="transport" type="STRING"/>
+      <property name="DISABLE_CHUNKING" scope="axis2" type="STRING" value="true"/>
+      <property description="messageType" name="messageType"
+        scope="axis2" type="STRING" value="application/json"/>
+      <call description="">
+        <endpoint key="CSC-RPC-Endpoint"/>
+      </call>
+      <property expression="json-eval($.result.details[0].category)"
+        name="TxType" scope="default" type="STRING"/>
+      <property expression="json-eval($.result.amount)" name="Amount"
+        scope="default" type="STRING"/>
+      <property expression="number($ctx:Amount) * 100000000"
+        name="TxSat" scope="default" type="STRING"/>
+      <property expression="json-eval($.result.time)" name="TxTime"
+        scope="default" type="STRING"/>
+      <property expression="json-eval($.result.details[0].address)"
+        name="CoinAddress" scope="default" type="STRING"/>
+      <property expression="json-eval($.result.confirmations)"
+        name="Confirmations" scope="default" type="INTEGER"/>
+      <log description="casinocoinNotification">
+        <property name="### " value="#"/>
+        <property expression="$ctx:Confirmations" name="Confirmations"/>
+        <property expression="$ctx:TxSat" name="TxSat"/>
+      </log>
+      <filter regex="^[1-9][0-9]*$" source="get-property('Confirmations')">
+        <then>
+          <property expression="json-eval($.result.blockhash)"
+            name="BlockHash" scope="default" type="STRING"/>
+          <log description="GetBlock for Hash">
+            <property name="### " value="#"/>
+            <property expression="$ctx:BlockHash" name="GetBlock for Hash:"/>
+          </log>
+          <payloadFactory description="GetBlock" media-type="json">
+            <format>{"jsonrpc": "1.0", "id": "wso2rpc", "method": "getblock", "params": ["$1"]}</format>
+            <args>
+              <arg evaluator="xml" expression="$ctx:BlockHash"/>
+            </args>
+          </payloadFactory>
+          <property
+            expression="fn:concat(get-property('CSC-RPC-USER'),':',get-property('CSC-RPC-PW'))"
+            name="CscRpcUserPass" scope="default" type="STRING"/>
+          <property
+            expression="fn:concat('Basic ', base64Encode(get-property('CscRpcUserPass')))"
+            name="Authorization" scope="transport" type="STRING"/>
+          <property name="DISABLE_CHUNKING" scope="axis2" type="STRING" value="true"/>
+          <property description="messageType" name="messageType"
+            scope="axis2" type="STRING" value="application/json"/>
+          <call description="">
+            <endpoint key="CSC-RPC-Endpoint"/>
+          </call>
+          <log description="GetBlock Result">
+            <property name="### " value="#"/>
+            <property expression="json-eval($)" name="GetBlock Result:"/>
+          </log>
+          <property expression="json-eval($.result.height)"
+            name="BlockHeight" scope="default" type="STRING"/>
+          <payloadFactory description="CreateDBPayload" media-type="xml">
+            <format>
+              <p:UpdateTransaction xmlns:p="http://ws.wso2.org/dataservice">
+                <xs:blockhash xmlns:xs="http://ws.wso2.org/dataservice">$1</xs:blockhash>
+                <xs:blockheight xmlns:xs="http://ws.wso2.org/dataservice">$2</xs:blockheight>
+                <xs:confirmations xmlns:xs="http://ws.wso2.org/dataservice">$3</xs:confirmations>
+                <xs:tx_id xmlns:xs="http://ws.wso2.org/dataservice">$4</xs:tx_id>
+              </p:UpdateTransaction>
+            </format>
+            <args>
+              <arg evaluator="xml" expression="$ctx:BlockHash"/>
+              <arg evaluator="xml" expression="$ctx:BlockHeight"/>
+              <arg evaluator="xml" expression="$ctx:Confirmations"/>
+              <arg evaluator="xml" expression="$ctx:query.param.txid"/>
+            </args>
+          </payloadFactory>
+          <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+          <property name="HTTP_METHOD" scope="axis2" type="STRING" value="POST"/>
+          <call description="">
+            <endpoint key="CoinSwapDSSEndpoint"/>
+          </call>
+        </then>
+        <else>
+          <property name="BlockHash" scope="default" type="STRING" value=""/>
+          <property name="BlockHeight" scope="default" type="STRING" value="0"/>
+          <payloadFactory description="CreateDBPayload" media-type="xml">
+            <format>
+              <p:CreateTransaction xmlns:p="http://ws.wso2.org/dataservice">
+                <xs:csp_id xmlns:xs="http://ws.wso2.org/dataservice">$1</xs:csp_id>
+                <xs:tx_id xmlns:xs="http://ws.wso2.org/dataservice">$2</xs:tx_id>
+                <xs:tx_coin xmlns:xs="http://ws.wso2.org/dataservice">$3</xs:tx_coin>
+                <xs:tx_type xmlns:xs="http://ws.wso2.org/dataservice">$4</xs:tx_type>
+                <xs:tx_sat xmlns:xs="http://ws.wso2.org/dataservice">$5</xs:tx_sat>
+                <xs:tx_time xmlns:xs="http://ws.wso2.org/dataservice">$6</xs:tx_time>
+                <xs:coin_address xmlns:xs="http://ws.wso2.org/dataservice">$7</xs:coin_address>
+                <xs:blockhash xmlns:xs="http://ws.wso2.org/dataservice">$8</xs:blockhash>
+                <xs:blockheight xmlns:xs="http://ws.wso2.org/dataservice">$9</xs:blockheight>
+                <xs:confirmations xmlns:xs="http://ws.wso2.org/dataservice">$10</xs:confirmations>
+              </p:CreateTransaction>
+            </format>
+            <args>
+              <arg value="0"/>
+              <arg evaluator="xml" expression="$ctx:query.param.txid"/>
+              <arg value="CSC"/>
+              <arg evaluator="xml" expression="$ctx:TxType"/>
+              <arg evaluator="xml" expression="$ctx:TxSat"/>
+              <arg evaluator="xml" expression="$ctx:TxTime"/>
+              <arg evaluator="xml" expression="$ctx:CoinAddress"/>
+              <arg evaluator="xml" expression="$ctx:BlockHash"/>
+              <arg evaluator="xml" expression="$ctx:BlockHeight"/>
+              <arg evaluator="xml" expression="$ctx:Confirmations"/>
+            </args>
+          </payloadFactory>
+          <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+          <property name="HTTP_METHOD" scope="axis2" type="STRING" value="POST"/>
+          <call description="">
+            <endpoint key="CoinSwapDSSEndpoint"/>
+          </call>
+        </else>
+      </filter>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+  </resource>
+</api>

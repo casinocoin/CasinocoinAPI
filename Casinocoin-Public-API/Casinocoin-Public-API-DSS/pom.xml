@@ -5,9 +5,13 @@
   <groupId>org.casinocoin.Public-API-DSS</groupId>
   <artifactId>Casinocoin-Public-API-DSS</artifactId>
   <version>0.1.1</version>
-  <packaging>service/dataservice</packaging>
+  <packaging>pom</packaging>
   <name>Casinocoin-Public-API-DSS</name>
   <description>Casinocoin-Public-API-DSS</description>
+  <properties>
+    <maven.test.skip>false</maven.test.skip>
+    <CApp.type>bpel/workflow=zip,lib/registry/filter=jar,webapp/jaxws=war,lib/library/bundle=jar,service/dataservice=dbs,synapse/local-entry=xml,synapse/proxy-service=xml,carbon/application=car,registry/resource=zip,lib/dataservice/validator=jar,synapse/endpoint=xml,web/application=war,lib/carbon/ui=jar,service/axis2=aar,synapse/sequence=xml,synapse/configuration=xml,wso2/gadget=dar,lib/registry/handlers=jar,lib/synapse/mediator=jar,synapse/task=xml,synapse/api=xml,synapse/template=xml,synapse/message-store=xml,synapse/message-processors=xml,synapse/inbound-endpoint=xml</CApp.type>
+  </properties>
   <repositories>
     <repository>
       <releases>
@@ -35,11 +39,22 @@
       <plugin>
         <groupId>org.wso2.maven</groupId>
         <artifactId>maven-dataservice-plugin</artifactId>
-        <version>2.0.10</version>
+        <version>2.1.0</version>
         <extensions>true</extensions>
-        <configuration>
-          <artifact>src/main/dataservice/Casinocoin-Public-API-DSS.dbs</artifact>
-        </configuration>
+        <executions>
+          <execution>
+            <id>dataservice</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>pom-gen</goal>
+            </goals>
+            <configuration>
+              <artifactLocation>.</artifactLocation>
+              <typeList>${artifact.types}</typeList>
+            </configuration>
+          </execution>
+        </executions>
+        <configuration />
       </plugin>
       <plugin>
         <artifactId>maven-eclipse-plugin</artifactId>

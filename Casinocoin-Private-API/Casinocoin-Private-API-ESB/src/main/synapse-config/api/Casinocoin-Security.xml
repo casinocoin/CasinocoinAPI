@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<api xmlns="http://ws.apache.org/ns/synapse" name="Casinocoin-Security" context="/CSCSecurity">
-    <resource methods="POST" uri-template="/authenticate">
-        <inSequence>
-            <property name="REST_URL_POSTFIX" scope="axis2" action="remove"/>
-            <property name="HTTP_METHOD" value="POST" scope="axis2" type="STRING"/>
-            <property name="Content-Type" value="application/x-www-form-urlencoded" scope="transport" type="STRING"/>
-            <call>
-                <endpoint>
-                    <address uri="https://localhost:9463//oauth2/token" format="rest"/>
-                </endpoint>
-            </call>
-            <log description="LogOauthResult">
-                <property name="### " value="OAuth result"/>
-                <property name="content" expression="json-eval($)"/>
-            </log>
-        </inSequence>
-        <outSequence>
-            <property name="messageType" value="application/json" scope="axis2" type="STRING" description="messageType"/>
-            <send/>
-        </outSequence>
-        <faultSequence/>
-    </resource>
+<api context="/CSCSecurity" name="Casinocoin-Security" xmlns="http://ws.apache.org/ns/synapse">
+  <resource methods="POST" protocol="http" uri-template="/startSession">
+    <inSequence>
+      <oauthService description="Check Token"
+        password="EjrJ0ldR4Vm468pTSOab"
+        remoteServiceUrl="https://localhost:9463/services/" username="createuser@casinocoin.org"/>
+      <property expression="json-eval($.email)" name="Emailaddress"
+        scope="default" type="STRING"/>
+      <payloadFactory description="StartWalletServerSession" media-type="json">
+        <format>{"jsonrpc": "1.0", "id": "wso2rpc", "method": "startwalletserversession", "params": ["$1"]}</format>
+        <args>
+          <arg evaluator="xml" expression="$ctx:Emailaddress"/>
+        </args>
+      </payloadFactory>
+      <property
+        expression="fn:concat('Basic ', base64Encode('casinocoinrpc:9x9iu8533XSucSpW9YDmN3ZXwR595AjeVo1pDCmvxSy5'))"
+        name="Authorization" scope="transport" type="STRING"/>
+      <property name="DISABLE_CHUNKING" scope="axis2" type="STRING" value="true"/>
+      <property description="messageType" name="messageType"
+        scope="axis2" type="STRING" value="application/json"/>
+      <call/>
+      <respond description="RespondResult"/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+  </resource>
 </api>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="updateCryptopia" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+  <property name="RESPONSE" scope="default" type="STRING" value="false"/>
+  <property description="CryptopiaInfo" name="CryptopiaID"
+    scope="default" type="STRING" value="CRYPTOPIA"/>
+  <property action="remove" description="NO_ENTITY_BODY"
+    name="NO_ENTITY_BODY" scope="axis2"/>
+  <call>
+    <endpoint key="CryptopiaAPIEndpoint"/>
+  </call>
+  <property description="LastBidPriceBTC"
+    expression="json-eval($.Data.BidPrice)" name="CryptopiaBidPriceBTC"
+    scope="default" type="STRING"/>
+  <property description="LastAskPriceBTC"
+    expression="json-eval($.Data.AskPrice)" name="CryptopiaAskPriceBTC"
+    scope="default" type="STRING"/>
+  <property description="LastPriceBTC"
+    expression="json-eval($.Data.LastPrice)"
+    name="CryptopiaLastPriceBTC" scope="default" type="STRING"/>
+  <property description="Volume24H"
+    expression="json-eval($.Data.Volume)" name="CryptopiaVolume24H"
+    scope="default" type="STRING"/>
+  <payloadFactory description="CreateDBPayload" media-type="xml">
+    <format>
+      <p:updateExchangeInfo xmlns:p="org.casinocoin.public.api.dss">
+        <xs:LastBidPriceBTC xmlns:xs="org.casinocoin.public.api.dss">$1</xs:LastBidPriceBTC>
+        <xs:LastAskPriceBTC xmlns:xs="org.casinocoin.public.api.dss">$2</xs:LastAskPriceBTC>
+        <xs:LastPriceBTC xmlns:xs="org.casinocoin.public.api.dss">$3</xs:LastPriceBTC>
+        <xs:Volume24H xmlns:xs="org.casinocoin.public.api.dss">$4</xs:Volume24H>
+        <xs:ShortName xmlns:xs="org.casinocoin.public.api.dss">$5</xs:ShortName>
+      </p:updateExchangeInfo>
+    </format>
+    <args>
+      <arg evaluator="xml" expression="$ctx:CryptopiaBidPriceBTC"/>
+      <arg evaluator="xml" expression="$ctx:CryptopiaAskPriceBTC"/>
+      <arg evaluator="xml" expression="$ctx:CryptopiaLastPriceBTC"/>
+      <arg evaluator="xml" expression="$ctx:CryptopiaVolume24H"/>
+      <arg evaluator="xml" expression="$ctx:CryptopiaID"/>
+    </args>
+  </payloadFactory>
+  <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+  <property name="HTTP_METHOD" scope="axis2" type="STRING" value="POST"/>
+  <call>
+    <endpoint key="UpdateExchangeInfoEndpoint"/>
+  </call>
+  <drop description="End"/>
+</sequence>

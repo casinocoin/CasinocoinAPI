@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<endpoint name="CryptopiaAPIEndpoint" xmlns="http://ws.apache.org/ns/synapse">
+  <http method="get" trace="disable" uri-template="https://www.cryptopia.co.nz/api/GetMarket/3519">
+    <timeout>
+      <duration>10000</duration>
+      <responseAction>fault</responseAction>
+    </timeout>
+  </http>
+</endpoint>

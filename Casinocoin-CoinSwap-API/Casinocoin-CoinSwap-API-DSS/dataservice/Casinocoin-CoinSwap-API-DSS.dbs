@@ -1,0 +1,147 @@
+<data name="Casinocoin-CoinSwap-API-DSS" serviceGroup="" serviceNamespace="">
+    <description>Coin Swap DSS services</description>
+    <config id="CscCoinSwapDS">
+        <property name="carbon_datasource_name">CscCoinSwapDS</property>
+    </config>
+    <query id="CreateCoinSwap" returnGeneratedKeys="true" useConfig="CscCoinSwapDS">
+        <sql>INSERT INTO csc_coinswap_api.coin_swap (
+swap_src_coin, 
+src_deposit_address, 
+src_return_address, 
+src_sat, 
+src_amount, 
+swap_dst_coin, 
+dst_address, 
+dst_sat, 
+dst_amount,
+aggreed_terms_time,
+aggreed_terms_ip
+) VALUES (?,?,?,?,?,?,?,?,?,FROM_UNIXTIME(0.001 * ?),?)</sql>
+        <param name="swap_src_coin" ordinal="1" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="src_deposit_address" ordinal="2" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="src_return_address" ordinal="3" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="src_sat" ordinal="4" paramType="SCALAR" sqlType="BIGINT" type="IN"/>
+        <param name="src_amount" ordinal="5" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="swap_dst_coin" ordinal="6" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="dst_address" ordinal="7" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="dst_sat" ordinal="8" paramType="SCALAR" sqlType="BIGINT" type="IN"/>
+        <param name="dst_amount" ordinal="9" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="aggreed_terms_time" ordinal="10" paramType="SCALAR" sqlType="BIGINT" type="IN"/>
+        <param name="aggreed_terms_ip" ordinal="11" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result element="GeneratedKeys" rowName="Entry" useColumnNumbers="true">
+            <element column="1" name="ID" exportType="SCALAR" xsdType="xs:integer"/>
+        </result>
+    </query>
+    <query id="StartCoinSwap" useConfig="CscCoinSwapDS">
+        <sql>UPDATE csc_coinswap_api.coin_swap SET swap_started_time=FROM_UNIXTIME(?), src_tx_id = ?, confirmations=0 WHERE swap_uuid = ?</sql>
+        <param name="swap_started_time" ordinal="1" paramType="SCALAR" sqlType="BIGINT" type="IN"/>
+        <param name="src_tx_id" ordinal="2" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="swap_uuid" ordinal="3" paramType="SCALAR" sqlType="STRING" type="IN"/>
+    </query>
+    <query id="UpdateCoinSwap" useConfig="CscCoinSwapDS">
+        <sql>UPDATE csc_coinswap_api.coin_swap SET swap_finished_time=FROM_UNIXTIME(0.001 * ?), dst_tx_id=?, confirmations=? WHERE swap_uuid = ?</sql>
+        <param name="swap_finished_time" ordinal="1" paramType="SCALAR" sqlType="BIGINT" type="IN"/>
+        <param name="dst_tx_id" ordinal="2" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="confirmations" ordinal="3" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
+        <param name="swap_uuid" ordinal="4" paramType="SCALAR" sqlType="STRING" type="IN"/>
+    </query>
+    <query id="CancelCoinSwap" useConfig="CscCoinSwapDS">
+        <sql>UPDATE csc_coinswap_api.coin_swap SET swap_canceled_time=FROM_UNIXTIME(0.001 * ?) WHERE swap_uuid = ?</sql>
+        <param name="swap_canceled_time" ordinal="1" paramType="SCALAR" sqlType="BIGINT" type="IN"/>
+        <param name="swap_uuid" ordinal="2" paramType="SCALAR" sqlType="STRING" type="IN"/>
+    </query>
+    <query id="RefundCoinSwap" useConfig="CscCoinSwapDS">
+        <sql>UPDATE csc_coinswap_api.coin_swap SET swap_refunded_time=FROM_UNIXTIME(0.001 * ?), refund_tx_id=? WHERE swap_uuid = ?</sql>
+        <param name="swap_refunded_time" ordinal="1" paramType="SCALAR" sqlType="BIGINT" type="IN"/>
+        <param name="refund_tx_id" ordinal="2" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="swap_uuid" ordinal="3" paramType="SCALAR" sqlType="STRING" type="IN"/>
+    </query>
+    <query id="CreateTransaction" returnGeneratedKeys="true" useConfig="CscCoinSwapDS">
+        <sql>INSERT INTO csc_coinswap_api.transactions (csp_id, tx_id, tx_coin, tx_type, tx_sat, tx_time, coin_address, blockhash, blockheight, confirmations) VALUES (?,?,?,?,CAST(? AS DECIMAL(16,0)),FROM_UNIXTIME(?),?,?,?,?)</sql>
+        <param name="csp_id" ordinal="1" paramType="SCALAR" sqlType="BIGINT" type="IN"/>
+        <param name="tx_id" ordinal="2" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tx_coin" ordinal="3" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tx_type" ordinal="4" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tx_sat" ordinal="5" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tx_time" ordinal="6" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
+        <param name="coin_address" ordinal="7" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="blockhash" ordinal="8" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="blockheight" ordinal="9" paramType="SCALAR" sqlType="BIGINT" type="IN"/>
+        <param name="confirmations" ordinal="10" paramType="SCALAR" sqlType="BIGINT" type="IN"/>
+        <result element="GeneratedKeys" rowName="Entry" useColumnNumbers="true">
+            <element column="1" name="ID" exportType="SCALAR" xsdType="xs:integer"/>
+        </result>
+    </query>
+    <query id="UpdateTransaction" useConfig="CscCoinSwapDS">
+        <sql>UPDATE csc_coinswap_api.transactions SET blockhash = ?, blockheight = ?, confirmations = ?, update_time = CURRENT_TIMESTAMP() WHERE tx_id = ?</sql>
+        <param name="blockhash" ordinal="1" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="blockheight" ordinal="2" paramType="SCALAR" sqlType="BIGINT" type="IN"/>
+        <param name="confirmations" ordinal="3" paramType="SCALAR" sqlType="BIGINT" type="IN"/>
+        <param name="tx_id" ordinal="4" paramType="SCALAR" sqlType="STRING" type="IN"/>
+    </query>
+    <operation returnRequestStatus="true" name="CreateCoinSwap">
+        <call-query href="CreateCoinSwap">
+            <with-param name="swap_src_coin" query-param="swap_src_coin"/>
+            <with-param name="src_deposit_address" query-param="src_deposit_address"/>
+            <with-param name="src_return_address" query-param="src_return_address"/>
+            <with-param name="src_sat" query-param="src_sat"/>
+            <with-param name="src_amount" query-param="src_amount"/>
+            <with-param name="swap_dst_coin" query-param="swap_dst_coin"/>
+            <with-param name="dst_address" query-param="dst_address"/>
+            <with-param name="dst_sat" query-param="dst_sat"/>
+            <with-param name="dst_amount" query-param="dst_amount"/>
+            <with-param name="aggreed_terms_time" query-param="aggreed_terms_time"/>
+            <with-param name="aggreed_terms_ip" query-param="aggreed_terms_ip"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="CreateTransaction">
+        <call-query href="CreateTransaction">
+            <with-param name="csp_id" query-param="csp_id"/>
+            <with-param name="tx_id" query-param="tx_id"/>
+            <with-param name="tx_coin" query-param="tx_coin"/>
+            <with-param name="tx_type" query-param="tx_type"/>
+            <with-param name="tx_sat" query-param="tx_sat"/>
+            <with-param name="tx_time" query-param="tx_time"/>
+            <with-param name="coin_address" query-param="coin_address"/>
+            <with-param name="blockhash" query-param="blockhash"/>
+            <with-param name="blockheight" query-param="blockheight"/>
+            <with-param name="confirmations" query-param="confirmations"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="UpdateTransaction">
+        <call-query href="UpdateTransaction">
+            <with-param name="blockhash" query-param="blockhash"/>
+            <with-param name="blockheight" query-param="blockheight"/>
+            <with-param name="confirmations" query-param="confirmations"/>
+            <with-param name="tx_id" query-param="tx_id"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="StartCoinSwap">
+        <call-query href="StartCoinSwap">
+            <with-param name="swap_started_time" query-param="swap_started_time"/>
+            <with-param name="src_tx_id" query-param="src_tx_id"/>
+            <with-param name="swap_uuid" query-param="swap_uuid"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="UpdateCoinSwap">
+        <call-query href="UpdateCoinSwap">
+            <with-param name="swap_finished_time" query-param="swap_finished_time"/>
+            <with-param name="dst_tx_id" query-param="dst_tx_id"/>
+            <with-param name="confirmations" query-param="confirmations"/>
+            <with-param name="swap_uuid" query-param="swap_uuid"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="CancelCoinSwap">
+        <call-query href="CancelCoinSwap">
+            <with-param name="swap_canceled_time" query-param="swap_canceled_time"/>
+            <with-param name="swap_uuid" query-param="swap_uuid"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="RefundCoinSwap">
+        <call-query href="RefundCoinSwap">
+            <with-param name="swap_refunded_time" query-param="swap_refunded_time"/>
+            <with-param name="refund_tx_id" query-param="refund_tx_id"/>
+            <with-param name="swap_uuid" query-param="swap_uuid"/>
+        </call-query>
+    </operation>
+</data>

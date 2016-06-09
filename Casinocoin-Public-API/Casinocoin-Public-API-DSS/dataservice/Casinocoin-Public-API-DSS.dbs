@@ -1,0 +1,194 @@
+<data name="Casinocoin-Public-API-DSS" serviceGroup="" serviceNamespace="org.casinocoin.public.api.dss">
+    <description>Public casinocoin api dss</description>
+    <config id="CscPublicApiDS">
+        <property name="carbon_datasource_name">CscPublicApiDS</property>
+    </config>
+    <query id="ActiveNewsItems" useConfig="CscPublicApiDS">
+        <sql>SELECT id, header, content, creation_time, valid_from, coalesce(valid_to, '') AS valid_to FROM csc_public_api.news WHERE valid_from &lt; now() and (valid_to IS NULL or valid_to &gt; now())</sql>
+        <result element="Result" rowName="ActiveNewsItems">
+            <element column="id" name="id" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="header" name="header" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="content" name="content" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="creation_time" name="creation_time" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="valid_from" name="valid_from" exportType="SCALAR" xsdType="xs:dateTime"/>
+            <element column="valid_to" name="valid_to" exportType="SCALAR" xsdType="xs:dateTime"/>
+        </result>
+        <properties>
+            <property name="org.wso2.ws.dataservice.query_timeout">5</property>
+            <property name="org.wso2.ws.dataservice.max_rows">100</property>
+        </properties>
+    </query>
+    <query id="ActiveCasinos" useConfig="CscPublicApiDS">
+        <sql>SELECT id, casino_name, access_url, description, creation_time, valid_from, coalesce(valid_to, '') AS valid_to FROM csc_public_api.casinos WHERE valid_from &lt; now() and (valid_to IS NULL or valid_to &gt; now())</sql>
+        <properties>
+            <property name="org.wso2.ws.dataservice.query_timeout">5</property>
+            <property name="org.wso2.ws.dataservice.max_rows">100</property>
+        </properties>
+        <result element="Result" rowName="ActiveCasinos">
+            <element column="id" name="id" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="casino_name" name="casino_name" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="access_url" name="access_url" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="description" name="description" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="creation_time" name="creation_time" exportType="SCALAR" xsdType="xs:dateTime"/>
+            <element column="valid_from" name="valid_from" exportType="SCALAR" xsdType="xs:dateTime"/>
+            <element column="valid_to" name="valid_to" exportType="SCALAR" xsdType="xs:dateTime"/>
+        </result>
+    </query>
+    <query id="ActiveExchanges" useConfig="CscPublicApiDS">
+        <sql>SELECT id, short_name, exchange_name, access_url, description, exchange_image, image_mime_type, last_bid_price_btc, last_ask_price_btc, last_price_btc, volume24h, creation_time, last_update_time, valid_from, coalesce(valid_to, '') AS valid_to FROM csc_public_api.exchanges WHERE valid_from &lt; now() and (valid_to IS NULL or valid_to &gt; now())</sql>
+        <properties>
+            <property name="org.wso2.ws.dataservice.query_timeout">5</property>
+            <property name="org.wso2.ws.dataservice.max_rows">100</property>
+        </properties>
+        <result element="Result" rowName="ActiveExchanges">
+            <element column="id" name="id" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="short_name" name="short_name" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="exchange_name" name="exchange_name" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="access_url" name="access_url" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="description" name="description" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="exchange_image" name="exchange_image" exportType="SCALAR" xsdType="xs:base64Binary"/>
+            <element column="image_mime_type" name="image_mime_type" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="last_bid_price_btc" name="last_bid_price_btc" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="last_ask_price_btc" name="last_ask_price_btc" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="last_price_btc" name="last_price_btc" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="volume24h" name="volume24h" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="creation_time" name="creation_time" exportType="SCALAR" xsdType="xs:dateTime"/>
+            <element column="last_update_time" name="last_update_time" exportType="SCALAR" xsdType="xs:dateTime"/>
+            <element column="valid_from" name="valid_from" exportType="SCALAR" xsdType="xs:dateTime"/>
+            <element column="valid_to" name="valid_to" exportType="SCALAR" xsdType="xs:dateTime"/>
+        </result>
+    </query>
+    <query id="ActivePromotions" useConfig="CscPublicApiDS">
+        <sql>SELECT id, promotion_title, access_url, description, promotion_image, image_mime_type, creation_time, valid_from, coalesce(valid_to, '') AS valid_to FROM csc_public_api.promotions WHERE valid_from &lt; now() and (valid_to IS NULL or valid_to &gt; now())</sql>
+        <properties>
+            <property name="org.wso2.ws.dataservice.query_timeout">5</property>
+            <property name="org.wso2.ws.dataservice.max_rows">10</property>
+        </properties>
+        <result element="Result" rowName="ActivePromotions">
+            <element column="id" name="id" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="promotion_title" name="promotion_title" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="access_url" name="access_url" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="description" name="description" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="promotion_image" name="promotion_image" exportType="SCALAR" xsdType="xs:base64Binary"/>
+            <element column="image_mime_type" name="image_mime_type" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="creation_time" name="creation_time" exportType="SCALAR" xsdType="xs:dateTime"/>
+            <element column="valid_from" name="valid_from" exportType="SCALAR" xsdType="xs:dateTime"/>
+            <element column="valid_to" name="valid_to" exportType="SCALAR" xsdType="xs:dateTime"/>
+        </result>
+    </query>
+    <query id="InsertCoinInfo" useConfig="CscPublicApiDS" keyColumns="id">
+        <sql>INSERT INTO csc_public_api.coin_info
+( difficulty, hashrate, coinsupply, marketcapital, blockheight, blockhash, blocktime, block_tx_count, price_btc_buy, price_btc_sell, price_btc, 
+  price_usd, price_eur, price_cny, price_jpy, price_rub, price_cad, price_gbp, price_aud, price_nzd) VALUES
+(?, ?, ?, ?, ?, ?, FROM_UNIXTIME(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)</sql>
+        <param name="Difficulty" ordinal="1" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="Hashrate" ordinal="2" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="CoinSupply" ordinal="3" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="MarketCapital" ordinal="4" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="BlockHeight" ordinal="5" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
+        <param name="BlockHash" ordinal="6" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="BlockTime" ordinal="7" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
+        <param name="BlockTxCount" ordinal="8" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
+        <param name="PriceBTCBuy" ordinal="9" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="PriceBTCSell" ordinal="10" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="PriceBTC" ordinal="11" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="PriceUSD" ordinal="12" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="PriceEUR" ordinal="13" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="PriceCNY" ordinal="14" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="PriceJPY" ordinal="15" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="PriceRUB" ordinal="16" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="PriceCAD" ordinal="17" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="PriceGBP" ordinal="18" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="PriceAUD" ordinal="19" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="PriceNZD" ordinal="20" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+    </query>
+    <query id="CoinInfo" useConfig="CscPublicApiDS">
+        <sql>SELECT id, difficulty, hashrate, coinsupply, marketcapital, blockheight, blockhash, blocktime, block_tx_count, 
+             price_btc_buy, price_btc_sell, price_btc, price_usd, price_eur, price_cny, price_jpy, price_rub, 
+             price_cad, price_gbp, price_aud, price_nzd, creation_time FROM csc_public_api.coin_info order by creation_time desc limit 1</sql>
+        <properties>
+            <property name="org.wso2.ws.dataservice.query_timeout">5</property>
+        </properties>
+        <result element="Result" rowName="CoinInfo">
+            <element column="id" name="ID" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="difficulty" name="Difficulty" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="hashrate" name="HashrateGH" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="coinsupply" name="CoinSupply" exportType="SCALAR" xsdType="xs:integer"/>
+            <element column="marketcapital" name="MarketCapital" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="blockheight" name="Blockheight" exportType="SCALAR" xsdType="xs:integer"/>
+            <element column="blockhash" name="BlockHash" exportType="SCALAR" xsdType="xs:string"/>
+            <element column="blocktime" name="BlockTime" exportType="SCALAR" xsdType="xs:dateTime"/>
+            <element column="block_tx_count" name="BlockTxCount" exportType="SCALAR" xsdType="xs:integer"/>
+            <element column="price_btc_buy" name="PriceBTCBuy" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="price_btc_sell" name="PriceBTCSell" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="price_btc" name="PriceBTC" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="price_usd" name="PriceUSD" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="price_eur" name="PriceEUR" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="price_cny" name="PriceCNY" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="price_jpy" name="PriceJPY" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="price_rub" name="PriceRUB" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="price_cad" name="PriceCAD" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="price_gbp" name="PriceGPB" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="price_aud" name="PriceAUD" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="price_nzd" name="PriceNZD" exportType="SCALAR" xsdType="xs:decimal"/>
+            <element column="creation_time" name="InfoTime" exportType="SCALAR" xsdType="xs:dateTime"/>
+        </result>
+    </query>
+    <query id="UpdateExchangeInfo" useConfig="CscPublicApiDS" keyColumns="id">
+        <sql>UPDATE csc_public_api.exchanges SET last_bid_price_btc = ?, last_ask_price_btc = ?, last_price_btc = ?, volume24h = ?, last_update_time = NOW()
+WHERE short_name = ?</sql>
+        <param name="LastBidPriceBTC" ordinal="1" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="LastAskPriceBTC" ordinal="2" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="LastPriceBTC" ordinal="3" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="Volume24H" ordinal="4" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="ShortName" ordinal="5" paramType="SCALAR" sqlType="STRING" type="IN"/>
+    </query>
+    <operation name="getActiveNewsItems">
+        <call-query href="ActiveNewsItems"/>
+    </operation>
+    <operation name="getActiveCasinos">
+        <call-query href="ActiveCasinos"/>
+    </operation>
+    <operation name="getActiveExchanges">
+        <call-query href="ActiveExchanges"/>
+    </operation>
+    <operation name="getActivePromotions">
+        <call-query href="ActivePromotions"/>
+    </operation>
+    <operation returnRequestStatus="true" name="setCoinInfo">
+        <call-query href="InsertCoinInfo">
+            <with-param name="Difficulty" query-param="Difficulty"/>
+            <with-param name="Hashrate" query-param="Hashrate"/>
+            <with-param name="CoinSupply" query-param="CoinSupply"/>
+            <with-param name="MarketCapital" query-param="MarketCapital"/>
+            <with-param name="BlockHeight" query-param="BlockHeight"/>
+            <with-param name="BlockHash" query-param="BlockHash"/>
+            <with-param name="BlockTime" query-param="BlockTime"/>
+            <with-param name="BlockTxCount" query-param="BlockTxCount"/>
+            <with-param name="PriceBTCBuy" query-param="PriceBTCBuy"/>
+            <with-param name="PriceBTCSell" query-param="PriceBTCSell"/>
+            <with-param name="PriceBTC" query-param="PriceBTC"/>
+            <with-param name="PriceUSD" query-param="PriceUSD"/>
+            <with-param name="PriceEUR" query-param="PriceEUR"/>
+            <with-param name="PriceCNY" query-param="PriceCNY"/>
+            <with-param name="PriceJPY" query-param="PriceJPY"/>
+            <with-param name="PriceRUB" query-param="PriceRUB"/>
+            <with-param name="PriceCAD" query-param="PriceCAD"/>
+            <with-param name="PriceGBP" query-param="PriceGBP"/>
+            <with-param name="PriceAUD" query-param="PriceAUD"/>
+            <with-param name="PriceNZD" query-param="PriceNZD"/>
+        </call-query>
+    </operation>
+    <operation name="getCoinInfo">
+        <call-query href="CoinInfo"/>
+    </operation>
+    <operation returnRequestStatus="true" name="updateExchangeInfo">
+        <call-query href="UpdateExchangeInfo">
+            <with-param name="LastBidPriceBTC" query-param="LastBidPriceBTC"/>
+            <with-param name="LastAskPriceBTC" query-param="LastAskPriceBTC"/>
+            <with-param name="LastPriceBTC" query-param="LastPriceBTC"/>
+            <with-param name="Volume24H" query-param="Volume24H"/>
+            <with-param name="ShortName" query-param="ShortName"/>
+        </call-query>
+    </operation>
+</data>

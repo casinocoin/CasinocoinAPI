@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="refundBTCDeposit" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+  <!--  Only refund if incoming amount is greater than 50000 sat -->
+  <filter xpath="((get-property('Amount')*100000000) > 50000)">
+    <then>
+      <property
+        expression="(((get-property('Amount')*100000000) - 50000) div 100000000)"
+        name="RefundAmount" scope="default" type="STRING"/>
+      <log description="Refund">
+        <property name="### " value="#"/>
+        <property expression="$ctx:RefundAddress" name="RefundAddress"/>
+        <property expression="$ctx:RefundAmount" name="RefundAmount"/>
+        <property expression="$ctx:SwapUUID" name="SwapUUID"/>
+      </log>
+      <payloadFactory description="RefundCoinsToAddress" media-type="json">
+        <format>{"jsonrpc": "1.0", "id": "wso2rpc", "method": "sendtoaddress", "params": ["$1",$2]}</format>
+        <args>
+          <arg evaluator="xml" expression="$ctx:RefundAddress"/>
+          <arg evaluator="xml" expression="$ctx:RefundAmount"/>
+        </args>
+      </payloadFactory>
+      <property
+        expression="fn:concat(get-property('BTC-RPC-USER'),':',get-property('BTC-RPC-PW'))"
+        name="BtcRpcUserPass" scope="default" type="STRING"/>
+      <property
+        expression="fn:concat('Basic ', base64Encode(get-property('BtcRpcUserPass')))"
+        name="Authorization" scope="transport" type="STRING"/>
+      <property name="DISABLE_CHUNKING" scope="axis2" type="STRING" value="true"/>
+      <property description="messageType" name="messageType"
+        scope="axis2" type="STRING" value="application/json"/>
+      <call description="">
+        <endpoint key="BTC-RPC-Endpoint"/>
+      </call>
+      <property expression="json-eval($.result)" name="RefundTxID"
+        scope="default" type="STRING"/>
+      <payloadFactory description="CreateDBPayload" media-type="xml">
+        <format>
+          <p:RefundCoinSwap xmlns:p="http://ws.wso2.org/dataservice">
+            <xs:swap_refunded_time xmlns:xs="http://ws.wso2.org/dataservice">$1</xs:swap_refunded_time>
+            <xs:refund_tx_id xmlns:xs="http://ws.wso2.org/dataservice">$2</xs:refund_tx_id>
+            <xs:swap_uuid xmlns:xs="http://ws.wso2.org/dataservice">$3</xs:swap_uuid>
+          </p:RefundCoinSwap>
+        </format>
+        <args>
+          <arg evaluator="xml" expression="number($ctx:BlockTime) * 1000"/>
+          <arg evaluator="xml" expression="$ctx:RefundTxID"/>
+          <arg evaluator="xml" expression="$ctx:SwapUUID"/>
+        </args>
+      </payloadFactory>
+      <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+      <property name="HTTP_METHOD" scope="axis2" type="STRING" value="POST"/>
+      <call description="">
+        <endpoint key="CoinSwapDSSEndpoint"/>
+      </call>
+    </then>
+    <else/>
+  </filter>
+</sequence>

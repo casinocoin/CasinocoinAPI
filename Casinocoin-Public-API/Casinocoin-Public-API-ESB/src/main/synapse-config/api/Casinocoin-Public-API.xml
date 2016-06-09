@@ -1,73 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<api xmlns="http://ws.apache.org/ns/synapse" name="Casinocoin-Public-API" context="/CSCPublicAPI">
-    <resource methods="GET" uri-template="/ActiveNewsItems">
-        <inSequence>
-            <send>
-                <endpoint>
-                    <address uri="http://localhost:9773/services/Casinocoin-Public-API-DSS.HTTPEndpoint/getActiveNewsItems" format="rest"/>
-                </endpoint>
-            </send>
-        </inSequence>
-        <outSequence>
-            <property name="messageType" value="application/json" scope="axis2" type="STRING" description="messageType"/>
-            <send/>
-        </outSequence>
-        <faultSequence/>
-    </resource>
-    <resource methods="GET" uri-template="/ActiveCasinos">
-        <inSequence>
-            <send>
-                <endpoint>
-                    <address uri="http://localhost:9773/services/Casinocoin-Public-API-DSS.HTTPEndpoint/getActiveCasinos" format="rest"/>
-                </endpoint>
-            </send>
-        </inSequence>
-        <outSequence>
-            <property name="messageType" value="application/json" scope="axis2" type="STRING" description="messageType"/>
-            <send/>
-        </outSequence>
-        <faultSequence/>
-    </resource>
-    <resource methods="GET" uri-template="/ActiveExchanges">
-        <inSequence>
-            <send>
-                <endpoint>
-                    <address uri="http://localhost:9773/services/Casinocoin-Public-API-DSS.HTTPEndpoint/getActiveExchanges" format="rest"/>
-                </endpoint>
-            </send>
-        </inSequence>
-        <outSequence>
-            <property name="messageType" value="application/json" scope="axis2" type="STRING" description="messageType"/>
-            <send/>
-        </outSequence>
-        <faultSequence/>
-    </resource>
-    <resource methods="GET" uri-template="/ActivePromotions">
-        <inSequence>
-            <send>
-                <endpoint>
-                    <address uri="http://localhost:9773/services/Casinocoin-Public-API-DSS.HTTPEndpoint/getActivePromotions" format="rest"/>
-                </endpoint>
-            </send>
-        </inSequence>
-        <outSequence>
-            <property name="messageType" value="application/json" scope="axis2" type="STRING" description="messageType"/>
-            <send/>
-        </outSequence>
-        <faultSequence/>
-    </resource>
-    <resource methods="GET" uri-template="/CoinInfo">
-        <inSequence>
-            <send>
-                <endpoint>
-                    <address uri="http://localhost:9773/services/Casinocoin-Public-API-DSS.HTTPEndpoint/getCoinInfo" format="rest"/>
-                </endpoint>
-            </send>
-        </inSequence>
-        <outSequence>
-            <property name="messageType" value="application/json" scope="axis2" type="STRING" description="messageType"/>
-            <send/>
-        </outSequence>
-        <faultSequence/>
-    </resource>
+<api context="/CSCPublicAPI" name="Casinocoin-Public-API" xmlns="http://ws.apache.org/ns/synapse">
+  <resource methods="GET" protocol="http" uri-template="/ActiveNewsItems">
+    <inSequence>
+      <send>
+        <endpoint key="GetActiveNewsItems"/>
+      </send>
+    </inSequence>
+    <outSequence>
+      <property description="messageType" name="messageType"
+        scope="axis2" type="STRING" value="application/json"/>
+      <send/>
+    </outSequence>
+    <faultSequence/>
+  </resource>
+  <resource methods="GET" protocol="http" uri-template="/ActiveCasinos">
+    <inSequence>
+      <send>
+        <endpoint key="GetActiveCasinos"/>
+      </send>
+    </inSequence>
+    <outSequence>
+      <property description="messageType" name="messageType"
+        scope="axis2" type="STRING" value="application/json"/>
+      <send/>
+    </outSequence>
+    <faultSequence/>
+  </resource>
+  <resource methods="GET" protocol="http" uri-template="/ActiveExchanges">
+    <inSequence>
+      <send>
+        <endpoint key="GetActiveExchanges"/>
+      </send>
+    </inSequence>
+    <outSequence>
+      <property description="messageType" name="messageType"
+        scope="axis2" type="STRING" value="application/json"/>
+      <send/>
+    </outSequence>
+    <faultSequence/>
+  </resource>
+  <resource methods="GET" protocol="http" uri-template="/ActivePromotions">
+    <inSequence>
+      <send>
+        <endpoint key="GetActivePromotions"/>
+      </send>
+    </inSequence>
+    <outSequence>
+      <property description="messageType" name="messageType"
+        scope="axis2" type="STRING" value="application/json"/>
+      <send/>
+    </outSequence>
+    <faultSequence/>
+  </resource>
+  <resource methods="GET" protocol="http" uri-template="/CoinInfo">
+    <inSequence>
+      <send>
+        <endpoint key="GetCoinInfo"/>
+      </send>
+    </inSequence>
+    <outSequence>
+      <property description="messageType" name="messageType"
+        scope="axis2" type="STRING" value="application/json"/>
+      <send/>
+    </outSequence>
+    <faultSequence/>
+  </resource>
 </api>
