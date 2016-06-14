@@ -56,4 +56,10 @@
     <artifact name="GetCoinInfo" groupId="org.casinocoin.Public-API-ESB.endpoint" version="0.1.1" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
         <file>src/main/synapse-config/endpoints/GetCoinInfo.xml</file>
     </artifact>
+    <artifact name="AlcurexComEndpoint" groupId="org.casinocoin.Public-API-ESB.endpoint" version="0.1.1" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/AlcurexComEndpoint.xml</file>
+    </artifact>
+    <artifact name="AlcurexTickerApiEndpoint" groupId="org.casinocoin.Public-API-ESB.endpoint" version="0.1.1" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/AlcurexTickerApiEndpoint.xml</file>
+    </artifact>
 </artifacts>

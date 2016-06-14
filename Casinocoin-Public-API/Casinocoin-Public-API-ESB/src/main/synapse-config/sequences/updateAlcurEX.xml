@@ -6,63 +6,25 @@
   <property action="remove" description="NO_ENTITY_BODY"
     name="NO_ENTITY_BODY" scope="axis2"/>
   <call>
-		<endpoint>
-			<http method="get" uri-template="https://alcurex.org/api/market.php?pair=CSC_BTC&amp;price=buy">
-				<timeout>
-					<duration>10000</duration>
-					<responseAction>discard</responseAction>
-				</timeout>
-			</http>
-		</endpoint>
-	</call>
+    <endpoint key="AlcurexComEndpoint"/>
+  </call>
   <property description="LastBidPriceBTC"
-    expression="json-eval($.CSC_BTC[0].price)"
-    name="AlcurEXLastBidPriceBTC" scope="default" type="STRING"/>
-  <property action="remove" description="NO_ENTITY_BODY"
-    name="NO_ENTITY_BODY" scope="axis2"/>
-  <call>
-        <endpoint>
-            <http method="get" uri-template="https://alcurex.org/api/market.php?pair=CSC_BTC&amp;price=sell">
-                <timeout>
-                    <duration>10000</duration>
-                    <responseAction>discard</responseAction>
-                </timeout>
-            </http>
-        </endpoint>
-    </call>
+    expression="json-eval($.Bid.Price)" name="AlcurEXLastBidPriceBTC"
+    scope="default" type="STRING"/>
   <property description="LastAskPriceBTC"
-    expression="json-eval($.CSC_BTC[0].price)"
-    name="AlcurEXLastAskPriceBTC" scope="default" type="STRING"/>
-  <property action="remove" description="NO_ENTITY_BODY"
-    name="NO_ENTITY_BODY" scope="axis2"/>
-  <call>
-        <endpoint>
-            <http method="get" uri-template="https://alcurex.org/api/market.php?pair=CSC_BTC&amp;last=last">
-                <timeout>
-                    <duration>10000</duration>
-                    <responseAction>discard</responseAction>
-                </timeout>
-            </http>
-        </endpoint>
-    </call>
+    expression="json-eval($.Ask.Price)" name="AlcurEXLastAskPriceBTC"
+    scope="default" type="STRING"/>
   <property description="LastPriceBTC"
-    expression="json-eval($.CSC_BTC.price)" name="AlcurEXLastPriceBTC"
+    expression="json-eval($.MainPair.Price)" name="AlcurEXLastPriceBTC"
     scope="default" type="STRING"/>
   <property action="remove" description="NO_ENTITY_BODY"
     name="NO_ENTITY_BODY" scope="axis2"/>
   <call>
-        <endpoint>
-            <http method="get" uri-template="https://alcurex.org/api/market.php?currency=CSC&amp;interval=24&amp;pair=CSC_BTC">
-                <timeout>
-                    <duration>10000</duration>
-                    <responseAction>discard</responseAction>
-                </timeout>
-            </http>
-        </endpoint>
-    </call>
+    <endpoint key="AlcurexTickerApiEndpoint"/>
+  </call>
   <property description="Volume24H"
-    expression="json-eval($.tradeamount)" name="AlcurEXVolume24H"
-    scope="default" type="STRING"/>
+    expression="json-eval($.CSC_BTC.quoteVolume)"
+    name="AlcurEXVolume24H" scope="default" type="STRING"/>
   <payloadFactory description="CreateDBPayload" media-type="xml">
     <format>
       <p:updateExchangeInfo xmlns:p="org.casinocoin.public.api.dss">
