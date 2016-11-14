@@ -1,3 +1,5 @@
-.metadata/.plugins/org.eclipse.core.resources/.history
+.metadata/
 .tmp
 Casinocoin-Public-API/target
+Casinocoin-Private-API/target
+Casinocoin-CoinSwap-API/target
