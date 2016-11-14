@@ -143,6 +143,14 @@ WHERE short_name = ?</sql>
         <param name="Volume24H" ordinal="4" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
         <param name="ShortName" ordinal="5" paramType="SCALAR" sqlType="STRING" type="IN"/>
     </query>
+    <query id="InsertExchangeHistory" useConfig="CscPublicApiDS" keyColumns="id">
+        <sql>INSERT INTO csc_public_api.exchange_history (short_name, bid_price_btc, ask_price_btc, price_btc, volume24h, creation_time) VALUES(?, ?, ?, ?, ?, NOW())</sql>
+        <param name="ShortName" ordinal="1" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="BidPriceBTC" ordinal="2" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="AskPriceBTC" ordinal="3" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="PriceBTC" ordinal="4" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="Volume24H" ordinal="5" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+    </query>
     <operation name="getActiveNewsItems">
         <call-query href="ActiveNewsItems"/>
     </operation>
@@ -189,6 +197,15 @@ WHERE short_name = ?</sql>
             <with-param name="LastPriceBTC" query-param="LastPriceBTC"/>
             <with-param name="Volume24H" query-param="Volume24H"/>
             <with-param name="ShortName" query-param="ShortName"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="insertExchangeHistory">
+        <call-query href="InsertExchangeHistory">
+            <with-param name="ShortName" query-param="ShortName"/>
+            <with-param name="BidPriceBTC" query-param="BidPriceBTC"/>
+            <with-param name="AskPriceBTC" query-param="AskPriceBTC"/>
+            <with-param name="PriceBTC" query-param="PriceBTC"/>
+            <with-param name="Volume24H" query-param="Volume24H"/>
         </call-query>
     </operation>
 </data>

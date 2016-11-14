@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><artifacts>
-    <artifact name="Casinocoin-Public-API-DSS" groupId="org.casinocoin.Public-API-DSS.dataservice" version="0.1.1" type="service/dataservice" serverRole="DataServicesServer">
+    <artifact name="Casinocoin-Public-API-DSS" groupId="org.casinocoin.Public-API-DSS.dataservice" version="0.1.2" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/Casinocoin-Public-API-DSS.dbs</file>
     </artifact>
 </artifacts>

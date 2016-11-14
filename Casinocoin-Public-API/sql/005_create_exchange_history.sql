@@ -12,3 +12,6 @@ CREATE TABLE csc_public_api.exchange_history
   CONSTRAINT ECS_PK PRIMARY KEY (id)
 )
 COMMENT = 'Casinocoin Exchange History table';
+
+ALTER TABLE `csc_public_api`.`exchange_history` 
+ADD INDEX `NAME_IDX` (`short_name` ASC);

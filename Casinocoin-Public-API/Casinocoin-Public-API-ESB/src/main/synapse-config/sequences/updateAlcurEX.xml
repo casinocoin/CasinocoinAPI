@@ -48,5 +48,28 @@
   <call>
     <endpoint key="UpdateExchangeInfoEndpoint"/>
   </call>
+  <payloadFactory description="CreateHistoryDBPayload" media-type="xml">
+    <format>
+      <p:insertExchangeHistory xmlns:p="org.casinocoin.public.api.dss">
+        <xs:ShortName xmlns:xs="org.casinocoin.public.api.dss">$1</xs:ShortName>
+        <xs:BidPriceBTC xmlns:xs="org.casinocoin.public.api.dss">$2</xs:BidPriceBTC>
+        <xs:AskPriceBTC xmlns:xs="org.casinocoin.public.api.dss">$3</xs:AskPriceBTC>
+        <xs:PriceBTC xmlns:xs="org.casinocoin.public.api.dss">$4</xs:PriceBTC>
+        <xs:Volume24H xmlns:xs="org.casinocoin.public.api.dss">$5</xs:Volume24H>
+      </p:insertExchangeHistory>
+    </format>
+    <args>
+      <arg evaluator="xml" expression="$ctx:AlcurEXExchangeID"/>
+      <arg evaluator="xml" expression="$ctx:AlcurEXLastBidPriceBTC"/>
+      <arg evaluator="xml" expression="$ctx:AlcurEXLastAskPriceBTC"/>
+      <arg evaluator="xml" expression="$ctx:AlcurEXLastPriceBTC"/>
+      <arg evaluator="xml" expression="$ctx:AlcurEXVolume24H"/>
+    </args>
+  </payloadFactory>
+  <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+  <property name="HTTP_METHOD" scope="axis2" type="STRING" value="POST"/>
+  <call>
+    <endpoint key="InsertExchangeHistoryEndpoint"/>
+  </call>
   <drop description="End"/>
 </sequence>
